@@ -872,12 +872,30 @@ a {
   font-weight: var(--font-medium); */
 }
 
-a.navbar-item.active {
-  background-color: var(--color-sub-white);
-  border-radius: 50px;
-  border-style: solid;
+.active{
+  color: lightskyblue!important;
+  background-color: var(--color-sub-light);
+  border-radius: 25px;
+  /*border-style: solid;*/
   border-color: var(--color-sub-light);
   padding: 1rem;
+}
+
+a.navbar-item {
+  background-color: transparent;
+  border-radius: 50px;
+  border-style: solid;
+  border-color: transparent;
+  padding: 1rem;
+}
+
+a:hover{
+  color : black!important;
+  background-color: darkgray;
+  border-radius: 25px;
+  /*border-style: solid;*/
+  border-color: transparent;
+  padding : 1rem;
 }
 
 .container {

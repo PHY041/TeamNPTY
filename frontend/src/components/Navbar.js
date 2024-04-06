@@ -1,7 +1,7 @@
 // import React, { useState } from "react";
 import compass from "./assets/compass.png";
 // import { FaTimes, FaBars } from "react-icons/fa";
-// import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 // import { FaUser, FaLock } from "react-icons/fa";
 
 const Navbar = () => {
@@ -19,13 +19,13 @@ const Navbar = () => {
           </label>
           <ul class="header__menu">
             <li class="header__menuItem">
-              <a href="/home" className="navbar-item">Home</a>
+                <NavLink to="/home" activeClassName="active">Home</NavLink>
             </li>
             <li class="header__menuItem">
-              <a href="/addevent" className="navbar-item">Add Event</a>
+              <NavLink to="/addevent" activeClassName="active">Add Event</NavLink>
             </li>
             <li class="header__menuItem">
-              <a href="/uploadimage" className="navbar-item">Upload File</a>
+              <NavLink to="/uploadimage" activeClassName="active">Upload File</NavLink>
             </li>
             <li class="header__menuItem">
               <a href="{% url 'logout' %}" class="btn btn--sub" id="logout-btn">
