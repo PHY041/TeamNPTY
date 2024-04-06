@@ -10,7 +10,12 @@
 
 a {
   text-decoration: none;
-  color: white;
+  color : white;
+}
+
+a:hover{
+  color: black;
+  background-color: white;
 }
 
 .navbar img {
@@ -48,7 +53,7 @@ a {
         font-size: 1.8rem;
         justify-content: center;
   }
-
+  
   .nav-menu.active{
     left:0;
   }
