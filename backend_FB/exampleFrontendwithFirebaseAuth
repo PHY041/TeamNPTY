@@ -1,0 +1,41 @@
+import React, { useEffect, useState } from 'react';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
+const firebaseConfig = {
+  // Your Firebase config object
+};
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app(); // if already initialized
+}
+
+const App = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Listen for authentication state changes
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in
+        user.getIdToken().then((token) => {
+          // Send this token to your backend via HTTPS
+        });
+        setUser(user);
+      } else {
+        // User is signed out
+        setUser(null);
+      }
+    });
+
+    // Clean up subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
+  // Render your login button, user info, etc.
+};
+
+export default App;

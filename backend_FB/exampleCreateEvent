@@ -1,0 +1,23 @@
+const createEvent = async (eventData) => {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    const idToken = await user.getIdToken();
+    
+    const response = await fetch('/api/events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': idToken, // Send the ID token in request headers
+      },
+      body: JSON.stringify(eventData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    return response.json();
+  } else {
+    // Handle the case where the user is not logged in
+  }
+};
