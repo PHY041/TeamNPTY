@@ -19,6 +19,11 @@ const Navbar = () => {
           <img src={compass} alt="DevSearch Logo" id="compass_logo" />
         </a>
         <nav className="header__nav">
+          <input type="checkbox" id="responsive-menu" />
+          <label htmlFor="responsive-menu" className="toggle-menu">
+            <span>Menu</span>
+            <div className="toggle-menu__lines"></div>
+          </label>
           <ul className="header__menu">
             <li className="header__menuItem">
               <NavLink to="/home" className="navitem">
