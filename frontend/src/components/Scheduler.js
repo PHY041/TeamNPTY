@@ -180,7 +180,7 @@ const Scheduler = () => {
             height="100%"
             currentView="Week"
             eventSettings={{ dataSource: dataManager, fields: fieldsData }}
-            readonly={false}
+            readonly={true}
           >
             <ViewsDirective>
               <ViewDirective option="Day" />
