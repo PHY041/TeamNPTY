@@ -1,23 +1,43 @@
 // import Sidebar from "../components/Sidebar"; // Importing Sidebar component
 import Navbar from "../components/Navbar"; // Importing Navbar component
-import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 
 const Uploadimage = () => {
-  const navigate = useNavigate(); // Hook to programmatically navigate
   const [eventDescription, setEventDescription] = useState("");
 
   const handleEventDescriptionChange = (event) => {
     setEventDescription(event.target.value);
   };
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Here, you can add your authentication logic (e.g., checking email and password)
+    let token = localStorage.getItem("token");
+    const fileInput = event.target.file;
+    let file = fileInput.files[0];
+    let formData = {
+      file: file,
+      description: event.target.description.value,
+    };
+    //replace the url with the url of the api
+    fetch("http://127.0.0.1:8000/api/users/token/", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("DATA:", data);
+        if (data) {
+          alert("Image uploaded successfully");
+          window.location.href = "/home";
+        } else {
+          alert("Failed to upload image");
+        }
+      });
 
-    // If login is successful, navigate to the home page
-    navigate("/home");
+    console.log(formData);
   };
 
   return (
@@ -26,26 +46,35 @@ const Uploadimage = () => {
 
       <h1>Upload Image</h1>
 
-      <main class="formPage my-xl">
-        <div class="content-box">
-          <div class="formWrapper">
-            <a class="backButton" href="/home">
-              <i class="im im-angle-left">&#60;</i>
+      <main className="formPage my-xl">
+        <div className="content-box">
+          <div className="formWrapper">
+            <a className="backButton" href="/home">
+              <i className="im im-angle-left">&#60;</i>
             </a>
             <br />
 
             <form
-              class="form"
+              className="form"
               method="POST"
-              enctype="multipart/form-data"
+              encType="multipart/form-data"
               onSubmit={handleSubmit}
             >
               <div className="form__field">
-                <label htmlFor="formInput#text">Upload file: </label>
-                <input type="file" className="input input--file" id="file" name="file" required />
+                <label htmlFor="file">
+                  Upload image (PNG, JPG,WEBP):{" "}
+                </label>
+                <input
+                  type="file"
+                  className="input input--file"
+                  id="file"
+                  name="file"
+                  accept="image/png, image/jpeg, image/webp"
+                  required
+                />
               </div>
               <div className="form__field">
-                <label htmlFor="formInput#text">Description: </label>
+                <label htmlFor="description">Description: </label>
                 <textarea
                   id="description"
                   name="description"
@@ -57,9 +86,9 @@ const Uploadimage = () => {
                   placeholder="Enter description here..."
                 ></textarea>
               </div>
-              
+
               <input
-                class="btn btn--sub btn--lg my-md"
+                className="btn btn--sub btn--lg my-md"
                 type="submit"
                 value="Submit"
               />

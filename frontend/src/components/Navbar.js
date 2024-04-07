@@ -5,30 +5,38 @@ import { NavLink } from "react-router-dom";
 // import { FaUser, FaLock } from "react-icons/fa";
 
 const Navbar = () => {
+  // let logoutBtn = document.getElementById("logout-btn");
+
+  // logoutBtn.addEventListener("click", () => {
+  //   localStorage.removeItem("token");
+  //   window.location.href = "/";
+  // });
+
   return (
-    <header class="header">
-      <div class="container container--narrow">
-        <a href="/home" class="header__logo" >
+    <header className="header">
+      <div className="container container--narrow">
+        <a href="/home" className="header__logo">
           <img src={compass} alt="DevSearch Logo" id="compass_logo" />
         </a>
-        <nav class="header__nav">
-          <input type="checkbox" id="responsive-menu" />
-          <label for="responsive-menu" class="toggle-menu">
-            <span>Menu</span>
-            <div class="toggle-menu__lines"></div>
-          </label>
-          <ul class="header__menu">
-            <li class="header__menuItem">
-                <NavLink to="/home" activeClassName="active">Home</NavLink>
+        <nav className="header__nav">
+          <ul className="header__menu">
+            <li className="header__menuItem">
+              <NavLink to="/home" className="navitem">
+                Home
+              </NavLink>
             </li>
-            <li class="header__menuItem">
-              <NavLink to="/addevent" activeClassName="active">Add Event</NavLink>
+            <li className="header__menuItem">
+              <NavLink to="/addevent" className="navitem">
+                Add Event
+              </NavLink>
             </li>
-            <li class="header__menuItem">
-              <NavLink to="/uploadimage" activeClassName="active">Upload File</NavLink>
+            <li className="header__menuItem">
+              <NavLink to="/uploadimage" className="navitem">
+                Upload File
+              </NavLink>
             </li>
-            <li class="header__menuItem">
-              <a href="{% url 'logout' %}" class="btn btn--sub" id="logout-btn">
+            <li className="header__menuItem">
+              <a href="/" className="btn btn--sub" id="logout-btn">
                 Logout
               </a>
             </li>

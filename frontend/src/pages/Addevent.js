@@ -1,10 +1,9 @@
 // import Sidebar from "../components/Sidebar"; // Importing Sidebar component
 import Navbar from "../components/Navbar"; // Importing Navbar component
-import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+// import { DateTimePickerComponent } from "@syncfusion/ej2-react-calendars";
 
 const Addevent = () => {
-  const navigate = useNavigate(); // Hook to programmatically navigate
   const [eventDescription, setEventDescription] = useState("");
 
   const handleEventDescriptionChange = (event) => {
@@ -13,10 +12,43 @@ const Addevent = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Here, you can add your authentication logic (e.g., checking email and password)
+    let token = localStorage.getItem("token");
 
-    // If login is successful, navigate to the home page
-    navigate("/home");
+    let start = document.getElementById("start").value;
+    let end = document.getElementById("end").value;
+    let startofevent = `${start}:00Z`;
+    let endofevent = `${end}:00Z`;
+
+    let formData = {
+      title: event.target.title.value,
+      description: event.target.description.value,
+      startofevent: startofevent,
+      endofevent: endofevent,
+      location: event.target.location.value,
+      isonline: event.target.isonline.checked,
+    };
+    //replace the url with the url of the api
+    fetch("http://127.0.0.1:8000/api/users/token/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = "/home";
+          console.log("Event created successfully");
+        } else {
+          alert("Error creating event");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
+    console.log(formData);
   };
 
   return (
@@ -34,13 +66,13 @@ const Addevent = () => {
             <br />
 
             <form
-              class="form"
+              className="form"
               method="POST"
-              enctype="multipart/form-data"
+              encType="multipart/form-data"
               onSubmit={handleSubmit}
             >
               <div className="form__field">
-                <label htmlFor="formInput#text">Title of Event: </label>
+                <label htmlFor="title">Title of Event: </label>
                 <input
                   type="text"
                   className="input input--text"
@@ -50,7 +82,7 @@ const Addevent = () => {
                 />
               </div>
               <div className="form__field">
-                <label htmlFor="formInput#text">Description: </label>
+                <label htmlFor="description">Description: </label>
                 <textarea
                   id="description"
                   name="description"
@@ -63,25 +95,33 @@ const Addevent = () => {
                 ></textarea>
               </div>
               <div className="form__field">
-                <label htmlFor="formInput#text">Start of Event: </label>
+                <label htmlFor="start">Start of Event: </label>
                 <input
                   type="datetime-local"
                   className="input input--datetime-local"
-                  id="startofevent"
-                  name="startofevent"
+                  id="start"
+                  name="start"
+                  required
                 />
+                {/* <div className="datetimepicker-control-section">
+                  <DateTimePickerComponent></DateTimePickerComponent>
+                </div> */}
               </div>
               <div className="form__field">
-                <label htmlFor="formInput#text">End of Event: </label>
+                <label htmlFor="end">End of Event: </label>
                 <input
                   type="datetime-local"
                   className="input input--datetime-local"
-                  id="endofevent"
-                  name="endofevent"
+                  id="end"
+                  name="end"
+                  required
                 />
+                {/* <div className="datetimepicker-control-section">
+                  <DateTimePickerComponent></DateTimePickerComponent>
+                </div> */}
               </div>
               <div className="form__field">
-                <label htmlFor="formInput#text">Location: </label>
+                <label htmlFor="location">Location: </label>
                 <input
                   type="text"
                   className="input input--text"
@@ -90,9 +130,7 @@ const Addevent = () => {
                 />
               </div>
               <div className="form__field">
-                <label htmlFor="formInput#text">
-                  Is Online ?
-                </label>
+                <label htmlFor="isonline">Is Online ?</label>
                 <input
                   type="checkbox"
                   className="input input--checkbox"

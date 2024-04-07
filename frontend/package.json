@@ -9,6 +9,8 @@
     "@mui/lab": "^5.0.0-alpha.167",
     "@mui/material": "^5.15.12",
     "@mui/x-date-pickers": "^6.19.6",
+    "@syncfusion/ej2-react-buttons": "^25.1.35",
+    "@syncfusion/ej2-react-calendars": "^25.1.37",
     "@syncfusion/ej2-react-schedule": "^25.1.37",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

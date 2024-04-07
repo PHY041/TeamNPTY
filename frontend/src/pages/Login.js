@@ -33,9 +33,9 @@ const Login = () => {
   };
 
   return (
-    <div class="auth">
-      <div class="card">
-        <div class="auth__header text-center">
+    <div className="auth">
+      <div className="card">
+        <div className="auth__header text-center">
           <img src={image} alt="logo" id="login-signup-image" />
           <h3>Compass</h3>
           <h4>Hello User, Welcome Back!</h4>
@@ -44,13 +44,13 @@ const Login = () => {
         <form
           action=""
           method="POST"
-          class="form auth__form"
+          className="form auth__form"
           onSubmit={handleSubmit}
         >
-          <div class="form__field">
-            <label for="formInput#text">Username: </label>
+          <div className="form__field">
+            <label htmlFor="formInput#text">Username: </label>
             <input
-              class="input input--text"
+              className="input input--text"
               id="formInput#text"
               type="text"
               name="username"
@@ -58,22 +58,22 @@ const Login = () => {
             />
           </div>
 
-          <div class="form__field">
-            <label for="formInput#password">Password: </label>
+          <div className="form__field">
+            <label htmlFor="formInput#password">Password: </label>
             <input
-              class="input input--password"
+              className="input input--password"
               id="formInput#password"
               type="password"
               name="password"
               placeholder="••••••••"
             />
           </div>
-          <div class="auth__actions">
-            <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
+          <div className="auth__actions">
+            <input className="btn btn--sub btn--lg" type="submit" value="Log In" />
             <a href="/">Forget Password?</a>
           </div>
         </form>
-        <div class="auth__alternative">
+        <div className="auth__alternative">
           <p>Don’t have an Account?</p>
           <a href="/signup">Sign Up</a>
         </div>

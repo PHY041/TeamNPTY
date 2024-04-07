@@ -4,12 +4,20 @@ import React from "react"; // If you're using React 17 or earlier, you need to i
 const Signup = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
+    let password1 = event.target.password1.value;
+    let password2 = event.target.password2.value;
+    let password3;
+    if (password1 !== password2) {
+      alert("Passwords do not match");
+      return;
+    } else {
+      password3 = password1;
+    }
     let formData = {
       name: event.target.name.value,
       username: event.target.username.value,
       email: event.target.email.value,
-      password1: event.target.password1.value,
-      password2: event.target.password2.value,
+      password: password3,
     };
 
     fetch("http://127.0.0.1:8000/api/users/token/", {
@@ -19,86 +27,95 @@ const Signup = () => {
       },
       body: JSON.stringify(formData),
     })
-    //how to interpret if user has been created? if yes proceed to login page and display user created else display error message
-    .then((response) => {
-      if (response.ok) {
-        window.location.href = "/";
-      } else {
-        alert("Error creating user");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+      //how to interpret if user has been created? if yes proceed to login page and display user created else display error message
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = "/";
+        } else {
+          alert("Error creating user");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
 
     console.log(formData);
   };
 
   return (
-    <div class="auth">
-      <div class="card">
-        <div class="auth__header text-center">
-          <img src={image} alt="logo"  id="login-signup-image"/>
+    <div className="auth">
+      <div className="card">
+        <div className="auth__header text-center">
+          <img src={image} alt="logo" id="login-signup-image" />
           <h3>Compass</h3>
           <h4>Register an account</h4>
         </div>
 
-        <form action="" method="POST" class="form auth__form" onSubmit={handleSubmit}>
-          <div class="form__field">
-            <label for="formInput#text">Real Name: </label>
+        <form
+          action=""
+          method="POST"
+          className="form auth__form"
+          onSubmit={handleSubmit}
+        >
+          <div className="form__field">
+            <label htmlFor="name">Real Name: </label>
             <input
-              class="input input--text"
-              id="formInput#text"
+              className="input input--text"
               type="text"
               name="name"
+              id="name"
               placeholder="Enter your real name..."
             />
           </div>
-          <div class="form__field">
-            <label for="formInput#text">Username: </label>
+          <div className="form__field">
+            <label htmlFor="username">Username: </label>
             <input
-              class="input input--text"
-              id="formInput#text"
+              className="input input--text"
               type="text"
               name="username"
+              id="username"
               placeholder="Enter your username..."
             />
           </div>
-          <div class="form__field">
-            <label for="formInput#text">Email address: </label>
+          <div className="form__field">
+            <label htmlFor="email">Email address: </label>
             <input
-              class="input input--text"
-              id="formInput#text"
+              className="input input--text"
               type="email"
               name="email"
+              id="email"
               placeholder="Enter your email..."
             />
           </div>
-          <div class="form__field">
-            <label for="formInput#text">Password: </label>
+          <div className="form__field">
+            <label htmlFor="password1">Password: </label>
             <input
-              class="input input--text"
-              id="formInput#text"
+              className="input input--text"
               type="password"
               name="password1"
+              id="password1"
               placeholder="Enter your password..."
             />
           </div>
-          <div class="form__field">
-            <label for="formInput#text">Password confirmation: </label>
+          <div className="form__field">
+            <label htmlFor="password2">Password confirmation: </label>
             <input
-              class="input input--text"
-              id="formInput#text"
+              className="input input--text"
               type="password"
               name="password2"
+              id="password2"
               placeholder="Enter your password again..."
             />
           </div>
-          <div class="auth__actions">
-            <input class="btn btn--sub btn--lg" type="submit" value="Sign up" />
+          <div className="auth__actions">
+            <input
+              className="btn btn--sub btn--lg"
+              type="submit"
+              value="Sign up"
+            />
           </div>
         </form>
-        <div class="auth__alternative">
+        <div className="auth__alternative">
           <p>Already have an Account?</p>
           <a href="/">Log In</a>
         </div>
@@ -108,10 +125,6 @@ const Signup = () => {
 };
 
 export default Signup;
-
-
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // import { useNavigate } from "react-router-dom";
@@ -126,7 +139,7 @@ export default Signup;
 //   const handleSubmit = (event) => {
 //     event.preventDefault();
 //     // Here, you can add your authentication logic (e.g., checking email and password)
-    
+
 //     // If login is successful, navigate to the home page
 //     navigate("/");
 //   };
@@ -166,4 +179,3 @@ export default Signup;
 // };
 
 // export default Signup;
-
