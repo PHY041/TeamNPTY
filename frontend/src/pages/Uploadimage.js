@@ -19,7 +19,7 @@ const Uploadimage = () => {
       description: event.target.description.value,
     };
     //replace the url with the url of the api
-    fetch("http://127.0.0.1:8000/api/users/token/", {
+    fetch("http://127.0.0.1:5000/extract", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

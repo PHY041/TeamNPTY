@@ -28,7 +28,7 @@ const Addevent = () => {
       isonline: event.target.isonline.checked,
     };
     //replace the url with the url of the api
-    fetch("http://127.0.0.1:8000/api/users/token/", {
+    fetch("http://127.0.0.1:5000/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

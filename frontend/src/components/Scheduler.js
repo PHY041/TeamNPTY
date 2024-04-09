@@ -12,7 +12,7 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import "../pages/main.css"; // import { DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
 // import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
-import { DataManager, ODataV4Adaptor} from "@syncfusion/ej2-data";
+import { DataManager, ODataV4Adaptor } from "@syncfusion/ej2-data";
 // Registering Syncfusion license key
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXxcdXVVRWJdUUByXkE="
@@ -20,18 +20,12 @@ registerLicense(
 
 const Scheduler = () => {
 
-  // const dataManager = new DataManager({
-  //   //replace the following url with our own Django endpoint
-  //   url: "https://services.syncfusion.com/react/production/api/schedule",
-  //   adaptor: new WebApiAdaptor(),
-  //   crossDomain: true,
-  // });
-
   const [dataManager, setDataManager] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       const manager = new DataManager({
         //replace the following url with our own Django endpoint
+        // url: "http://127.0.0.1:5000/my-events",
         url: "https://services.syncfusion.com/react/production/api/schedule",
         adaptor: new ODataV4Adaptor(),
       });
@@ -51,136 +45,151 @@ const Scheduler = () => {
     endTime: { name: "EndTime" },
     isOnline: { name: "IsOnline" },
   };
+  const handleAddEvent = (args) => {
+    // Send request to external API to add event
+    let token = localStorage.getItem("token");
+    let startofevent = args.data[0].StartTime.toISOString();
+    let endofevent = args.data[0].EndTime.toISOString();
+    startofevent = startofevent.replace(/\.\d{3}/, "");
+    endofevent = endofevent.replace(/\.\d{3}/, "");
 
-  // const handlenewevent = (event) => {
-  //   event.preventDefault();
-  //   let token = localStorage.getItem("token");
+    let formData = {
+      title: args.data[0].Subject,
+      description: args.data[0].Description,
+      startofevent: startofevent,
+      endofevent: endofevent,
+      location: args.data[0].Location,
+      isonline: args.data[0].isOnline,
+    };
+    fetch(`http://127.0.0.1:5000/events`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = "/home";
+          console.log("Event updated successfully");
+        } else {
+          alert("Error updating event");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    console.log(args.data);
+    console.log(formData);
+    console.log("event added");
+    // Use args.data to access the event data
+  };
 
-  //   let start = document.getElementById("start").value;
-  //   let end = document.getElementById("end").value;
-  //   let startofevent = `${start}:00Z`;
-  //   let endofevent = `${end}:00Z`;
+  const handleEditEvent = (args) => {
+    // Send request to external API to edit event
+    let token = localStorage.getItem("token");
+    let startofevent = args.data.StartTime.toISOString();
+    let endofevent = args.data.EndTime.toISOString();
+    startofevent = startofevent.replace(/\.\d{3}/, "");
+    endofevent = endofevent.replace(/\.\d{3}/, "");
+    let id = args.data.Id;
+    let formData = {
+      id: id,
+      title: args.data.Subject,
+      description: args.data.Description,
+      startofevent: startofevent,
+      endofevent: endofevent,
+      location: args.data.Location,
+      isonline: args.data.isOnline,
+    };
+    fetch(`http://127.0.0.1:5000/events/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = "/home";
+          console.log("Event updated successfully");
+        } else {
+          alert("Error updating event");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    console.log(args.data);
+    console.log(formData);
+    console.log("event updated");
+    // Use args.data to access the event data
+  };
 
-  //   let formData = {
-  //     title: event.target.title.value,
-  //     description: event.target.description.value,
-  //     startofevent: startofevent,
-  //     endofevent: endofevent,
-  //     location: event.target.location.value,
-  //     isonline: event.target.isonline.checked,
-  //   };
-  //   //replace the url with the url of the api
-  //   fetch("http://127.0.0.1:8000/api/users/token/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     body: JSON.stringify(formData),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("DATA:", data);
-  //       if (data) {
-  //         alert("Event added successfully");
-  //         window.location.href = "/home";
-  //       } else {
-  //         alert("Failed to add event");
-  //       }
-  //     });
+  const handleDeleteEvent = (args) => {
+    // Send request to external API to delete event
+    let token = localStorage.getItem("token");
+    let startofevent = args.data[0].StartTime.toISOString();
+    let endofevent = args.data[0].EndTime.toISOString();
+    let id = args.data[0].Id;
+    startofevent = startofevent.replace(/\.\d{3}/, "");
+    endofevent = endofevent.replace(/\.\d{3}/, "");
 
-  //   console.log(formData);
-  // };
-  // const handleeditevent = (event) => {
-  //   event.preventDefault();
-  //   let token = localStorage.getItem("token");
-
-  //   let start = document.getElementById("start").value;
-  //   let end = document.getElementById("end").value;
-  //   let startofevent = `${start}:00Z`;
-  //   let endofevent = `${end}:00Z`;
-
-  //   let formData = {
-  //     title: event.target.title.value,
-  //     description: event.target.description.value,
-  //     startofevent: startofevent,
-  //     endofevent: endofevent,
-  //     location: event.target.location.value,
-  //     isonline: event.target.isonline.checked,
-  //   };
-  //   //replace the url with the url of the api
-  //   fetch("http://127.0.0.1:8000/api/users/token/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     body: JSON.stringify(formData),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("DATA:", data);
-  //       if (data) {
-  //         alert("Event added successfully");
-  //         window.location.href = "/home";
-  //       } else {
-  //         alert("Failed to add event");
-  //       }
-  //     });
-
-  //   console.log(formData);
-  // };
-  // const handledeleteevent = (event) => {
-  //   event.preventDefault();
-  //   let token = localStorage.getItem("token");
-
-  //   let start = document.getElementById("start").value;
-  //   let end = document.getElementById("end").value;
-  //   let startofevent = `${start}:00Z`;
-  //   let endofevent = `${end}:00Z`;
-
-  //   let formData = {
-  //     title: event.target.title.value,
-  //     description: event.target.description.value,
-  //     startofevent: startofevent,
-  //     endofevent: endofevent,
-  //     location: event.target.location.value,
-  //     isonline: event.target.isonline.checked,
-  //   };
-  //   //replace the url with the url of the api
-  //   fetch("http://127.0.0.1:8000/api/users/token/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     body: JSON.stringify(formData),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("DATA:", data);
-  //       if (data) {
-  //         alert("Event added successfully");
-  //         window.location.href = "/home";
-  //       } else {
-  //         alert("Failed to add event");
-  //       }
-  //     });
-
-  //   console.log(formData);
-  // };
+    let formData = {
+      id: id,
+      title: args.data[0].Subject,
+      description: args.data[0].Description,
+      startofevent: startofevent,
+      endofevent: endofevent,
+      location: args.data[0].Location,
+      isonline: args.data[0].isOnline,
+    };
+    fetch(`http://127.0.0.1:5000/events/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = "/home";
+          console.log("Event deleted successfully");
+        } else {
+          alert("Error deleting event");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    console.log(args.data);
+    console.log(formData);
+    console.log("event deleted");
+    // Use args.data to access the event data
+  };
 
   return (
     <div className="schedule-control-section">
       <div className="control-section">
         <div className="control-wrapper">
-          
           <ScheduleComponent
             width="100%"
             height="100%"
             currentView="Week"
             eventSettings={{ dataSource: dataManager, fields: fieldsData }}
-            readonly={true}
+            readonly={false}
+            actionBegin={(args) => {
+              if (args.requestType === "eventCreate") {
+                handleAddEvent(args);
+              } else if (args.requestType === "eventChange") {
+                handleEditEvent(args);
+              } else if (args.requestType === "eventRemove") {
+                handleDeleteEvent(args);
+              }
+            }}
           >
             <ViewsDirective>
               <ViewDirective option="Day" />
@@ -196,72 +205,3 @@ const Scheduler = () => {
   );
 };
 export default Scheduler;
-
-// const Scheduler = () => {
-//   let data = [
-//     {
-//       Id: 1,
-//       Title: "Explosion of Betelgeuse Star",
-//       StartTime: new Date(2024, 3, 2, 9, 30),
-//       EndTime: new Date(2024, 3, 2, 11, 0),
-//     },
-//     {
-//       Id: 2,
-//       Title: "Thule Air Crash Report",
-//       Location: "New York",
-//       StartTime: new Date(2024, 3, 2, 12, 0),
-//       EndTime: new Date(2024, 3, 2, 14, 0),
-//     },
-//     {
-//       Id: 3,
-//       Title: "Blue Moon Eclipse",
-//       StartTime: new Date(2024, 3, 2, 9, 30),
-//       EndTime: new Date(2024, 3, 2, 11, 0),
-//     },
-//     {
-//       Id: 4,
-//       Title: "Meteor Showers in 2018",
-//       StartTime: new Date(2024, 3, 2, 13, 0),
-//       EndTime: new Date(2024, 3, 2, 14, 30),
-//     },
-//   ];
-
-//   // const [data, setData] = useState([]);
-
-//   // useEffect(() => {
-//   //   async function fetchData() {
-//   //     try {
-//   //       const response = await fetch("https://your-django-endpoint");
-//   //       const jsonData = await response.json();
-//   //       setData(jsonData);
-//   //     } catch (error) {
-//   //       console.error("Error fetching data:", error);
-//   //     }
-//   //   }
-
-//   //   fetchData();
-//   // }, []);
-
-//   const fieldsData = {
-//     id: { name: "Id" },
-//     subject: { name: "Title" },
-//     location: { name: "Location" },
-//     description: { name: "Description" },
-//     startTime: { name: "StartTime" },
-//     endTime: { name: "EndTime" },
-//     isOnline: { name: "IsOnline" },
-//   };
-//   const eventSettings = { dataSource: data, fields: fieldsData };
-
-//   return (
-//     <ScheduleComponent
-//       currentView="Week"
-//       readonly={true}
-//       eventSettings={eventSettings}
-//     >
-//       <Inject services={[Day, Week, WorkWeek, Month]} />
-//     </ScheduleComponent>
-//   );
-// };
-
-// export default Scheduler;
