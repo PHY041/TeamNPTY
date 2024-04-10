@@ -189,6 +189,8 @@ body {
   color: var(--color-text);
   background-color: var(--color-bg);
   min-height: 100vh;
+  /* background: url(../components/assets/pattern.jpg);
+  opacity: 1; */
 }
 .btn {
   display: inline-block;
@@ -1480,89 +1482,6 @@ img {
 }
 
 /*=======================
-  Login/SignUp
-========================*/
-
-.auth {
-  width: 100%;
-  position: relative;
-  z-index: 1;
-  background: transparent;
-  height: 99vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.auth::after {
-  z-index: -1;
-  opacity: 0.1;
-  content: "";
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: url(../components/assets/pattern.jpg);
-}
-
-.auth > .card {
-  padding: 3rem 4rem;
-  width: 95%;
-  max-width: 65rem;
-}
-
-@media screen and (min-width: 650px) {
-  .auth > .card {
-    padding: 5rem 8rem;
-    width: 95%;
-    max-width: 65rem;
-  }
-}
-
-.auth__form {
-  margin: 3rem 0;
-}
-
-.auth .auth__form label,
-.auth .auth__alternative p {
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: var(--color-sub-light);
-}
-
-.auth .auth__actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 2.5rem 0;
-}
-.auth .auth__actions a {
-  text-decoration: underline;
-}
-
-.auth .auth__alternative a {
-  font-size: 2rem;
-  font-weight: 500;
-}
-
-.backButton {
-  background: var(--color-main-light);
-  color: var(--color-main);
-  width: 4rem;
-  height: 4rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-}
-
-.backButton i {
-  font-size: 1.8rem;
-}
-
-/*=======================
   Form Page
 ========================*/
 
@@ -2268,7 +2187,7 @@ img {
 
 .auth::after {
   z-index: -1;
-  opacity: 0.1;
+  opacity: 0.3;
   content: "";
   display: block;
   position: fixed;
@@ -2326,6 +2245,25 @@ img {
   text-decoration: underline;
 }
 
+.auth .auth__alternative a {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.backButton {
+  background: var(--color-main-light);
+  color: var(--color-main);
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.backButton i {
+  font-size: 1.8rem;
+}
 /*=======================
     Inbox
   ========================*/

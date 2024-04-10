@@ -55,8 +55,6 @@ const Addevent = () => {
     <>
       <Navbar />
 
-      <h1>Event Form</h1>
-
       <main className="formPage my-xl">
         <div className="content-box">
           <div className="formWrapper">
@@ -64,6 +62,8 @@ const Addevent = () => {
               <i className="im im-angle-left">&#60;</i>
             </a>
             <br />
+            <h1>Add Event</h1>
+            {/* <br /> */}
 
             <form
               className="form"

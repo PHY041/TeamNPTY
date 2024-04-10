@@ -44,8 +44,6 @@ const Uploadimage = () => {
     <>
       <Navbar />
 
-      <h1>Upload Image</h1>
-
       <main className="formPage my-xl">
         <div className="content-box">
           <div className="formWrapper">
@@ -53,6 +51,7 @@ const Uploadimage = () => {
               <i className="im im-angle-left">&#60;</i>
             </a>
             <br />
+            <h1>Upload Image</h1>
 
             <form
               className="form"
