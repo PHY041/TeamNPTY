@@ -7,7 +7,7 @@ const Login = () => {
     event.preventDefault();
 
     let formData = {
-      username: event.target.username.value,
+      email: event.target.email.value,
       password: event.target.password.value,
     };
 
@@ -25,7 +25,7 @@ const Login = () => {
           localStorage.setItem("token", data.access);
           window.location.href = "/home";
         } else {
-          alert("Username OR password did not work");
+          alert("Email OR password did not work");
         }
       });
 
@@ -48,13 +48,13 @@ const Login = () => {
           onSubmit={handleSubmit}
         >
           <div className="form__field">
-            <label htmlFor="formInput#text">Username: </label>
+            <label htmlFor="formInput#text">Email: </label>
             <input
               className="input input--text"
               id="formInput#text"
               type="text"
-              name="username"
-              placeholder="Enter your username..."
+              name="email"
+              placeholder="Enter your email..."
             />
           </div>
 
@@ -69,7 +69,11 @@ const Login = () => {
             />
           </div>
           <div className="auth__actions">
-            <input className="btn btn--sub btn--lg" type="submit" value="Log In" />
+            <input
+              className="btn btn--sub btn--lg"
+              type="submit"
+              value="Log In"
+            />
             <a href="/">Forget Password?</a>
           </div>
         </form>
