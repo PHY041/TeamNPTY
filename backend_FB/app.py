@@ -33,6 +33,43 @@ def get_collection_ref(collection_name):
 
 #can just call https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E
 
+@app.route('/signup', methods=['POST'])
+def signup():
+    email = request.json.get('email')
+    password = request.json.get('password')
+    return_secure_token = True  # Set to True to get an ID and refresh token from Firebase
+
+    # Prepare the payload with email and password
+    payload = {
+        'email': email,
+        'password': password,
+        'returnSecureToken': return_secure_token
+    }
+
+    # Firebase Authentication sign-up endpoint with the API key
+    url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E'
+
+    try:
+        # Make the POST request to Firebase Authentication API
+        r = requests.post(url, json=payload)
+
+        # If the request is successful
+        if r.status_code == 200:
+            # Parse the response data
+            user_data = r.json()
+            # You could perform additional steps here, like creating a user profile in your database
+
+            # Return success response
+            return jsonify({'success': True, 'data': user_data}), 200
+        else:
+            # Handle request failure
+            return jsonify({'success': False, 'error': r.json()}), r.status_code
+
+    except Exception as e:
+        # Handle other exceptions
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+'''
 #works for realtime data base, need to change to user authentication 
 @app.route('/signup', methods=['POST'])
 def create_user():
@@ -42,9 +79,42 @@ def create_user():
     new_ref = ref.push()
     new_ref.set(user_data)
     return jsonify({"message": "User created", "id": new_ref.key}), 201
-
+'''
 
 #just need to call https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E
+
+def login():
+    email = request.json.get('email')
+    password = request.json.get('password')
+    return_secure_token = True  # Set to True to get an ID and refresh token from Firebase
+
+    # Prepare the payload with email and password
+    payload = {
+        'email': email,
+        'password': password,
+        'returnSecureToken': return_secure_token
+    }
+
+    # Firebase Authentication sign-in endpoint with the API key
+    url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E'
+
+    try:
+        # Make the POST request to Firebase Authentication API
+        r = requests.post(url, json=payload)
+
+        # If the request is successful
+        if r.status_code == 200:
+            # Parse the response data
+            user_data = r.json()
+            # Return success response
+            return jsonify({'success': True, 'data': user_data}), 200
+        else:
+            # Handle request failure
+            return jsonify({'success': False, 'error': r.json()}), r.status_code
+
+    except Exception as e:
+        # Handle other exceptions
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 
 #will not work 
