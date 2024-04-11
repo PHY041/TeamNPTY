@@ -2,7 +2,7 @@ from openai import OpenAI
 import re
 import ast
 
-client = OpenAI()
+client = OpenAI(api_key='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')
 
 prompt_content =(
     "the user can imput any form of image, be it a poster, screenshot or any other form of image that contains events."

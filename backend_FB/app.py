@@ -5,7 +5,7 @@ from firebase_admin import db
 from readcalonline import get_event_details_from_image
 
 # Initialize the Firebase app with Realtime Database URL
-cred = credentials.Certificate(r'C:\Users\Benny Pang\Desktop\NTU study\SC2006\Team project\compassproject-dbf1c-firebase-adminsdk-vskzq-c9d334f0eb.json')
+cred = credentials.Certificate(r'compassproject-dbf1c-firebase-adminsdk-vskzq-c9d334f0eb.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL' : 'https://compassproject-dbf1c-default-rtdb.asia-southeast1.firebasedatabase.app/'
 })
