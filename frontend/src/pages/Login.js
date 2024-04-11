@@ -20,14 +20,25 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("DATA:", data.access);
-        if (data.access) {
-          localStorage.setItem("token", data.access);
+        console.log("DATA:", data);
+        if (data.success) {
+          localStorage.setItem("token", data.refresh_token);
           window.location.href = "/home";
         } else {
           alert("Email OR password did not work");
         }
       });
+    // .then((data) => {
+    //   console.log("DATA:", data.access);
+    //   if (data.success) {
+    //     console.log("Success: ", data.success);
+    //     localStorage.setItem("token", data.access);
+    //     window.location.href
+    //     = "/home";
+    //   } else {
+    //     alert("Email OR password did not work");
+    //   }
+    // });
 
     console.log(formData);
   };

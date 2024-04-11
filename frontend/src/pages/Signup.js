@@ -28,10 +28,13 @@ const Signup = () => {
       body: JSON.stringify(formData),
     })
       //how to interpret if user has been created? if yes proceed to login page and display user created else display error message
-      .then((response) => {
-        if (response.ok) {
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("DATA:", data);
+        if (data.success) {
           window.location.href = "/";
         } else {
+          console.log("Success: ", data.success);
           alert("Error creating user");
         }
       })

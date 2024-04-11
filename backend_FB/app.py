@@ -3,6 +3,8 @@ import firebase_admin
 from firebase_admin import credentials, auth
 from firebase_admin import db
 from readcalonline import get_event_details_from_image
+from flask_cors import CORS
+import requests
 
 # Initialize the Firebase app with Realtime Database URL
 cred = credentials.Certificate(r'compassproject-dbf1c-firebase-adminsdk-vskzq-c9d334f0eb.json')
@@ -21,7 +23,7 @@ def save_data_to_realtime_database(data):
 
 # Initialize Flask app
 app = Flask(__name__)
-
+CORS(app)
 #ticked
 @app.route('/')
 def home():
@@ -34,24 +36,14 @@ def get_collection_ref(collection_name):
 #can just call https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E
 
 @app.route('/signup', methods=['POST'])
-def signup():
-    email = request.json.get('email')
-    password = request.json.get('password')
-    return_secure_token = True  # Set to True to get an ID and refresh token from Firebase
-
-    # Prepare the payload with email and password
-    payload = {
-        'email': email,
-        'password': password,
-        'returnSecureToken': return_secure_token
-    }
+def create_user():
 
     # Firebase Authentication sign-up endpoint with the API key
     url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E'
 
     try:
         # Make the POST request to Firebase Authentication API
-        r = requests.post(url, json=payload)
+        r = requests.post(url, json=request.json)
 
         # If the request is successful
         if r.status_code == 200:
@@ -83,10 +75,11 @@ def create_user():
 
 #just need to call https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E
 
+@app.route('/login', methods=['POST'])
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
-    return_secure_token = True  # Set to True to get an ID and refresh token from Firebase
+    return_secure_token = True # Set to True to get an ID and refresh token from Firebase
 
     # Prepare the payload with email and password
     payload = {
@@ -105,9 +98,10 @@ def login():
         # If the request is successful
         if r.status_code == 200:
             # Parse the response data
-            user_data = r.json()
+            id_token = r.json().get('idToken')
+            refresh_token = r.json().get('refreshToken')
             # Return success response
-            return jsonify({'success': True, 'data': user_data}), 200
+            return jsonify({'success': True, 'id_token': id_token, 'refresh-token': refresh_token}), 200
         else:
             # Handle request failure
             return jsonify({'success': False, 'error': r.json()}), r.status_code
@@ -118,22 +112,26 @@ def login():
 
 
 #will not work 
-@app.route('/login', methods=['POST'])
-def login():
-    # Get the ID token sent by the client
-    id_token = request.json.get('idToken')
-    if id_token:
-        try:
-            # Check the token against the Firebase Auth API
-            decoded_token = auth.verify_id_token(id_token)
-            #uid = decoded_token['uid']
-            uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
-            return jsonify({"message": "User authenticated", "uid": uid}), 200
-        except auth.AuthError as e:
-            # Token is invalid
-            return jsonify({"error": "Invalid credentials", "details": str(e)}), 401
-    else:
-        return jsonify({"error": "Missing ID token"}), 400
+# @app.route('/login', methods=['POST'])
+# def login():
+#     # Get the ID token sent by the client
+#     email = request.json.get('email')
+#     password = request.json.get('password')
+#     id_token = request.json.get('idToken')
+#     if (email):
+#         try:
+#             # Check the token against the Firebase Auth API
+#             user = auth.get_user_by_email(email)
+            
+#             decoded_token = auth.verify_id_token(id_token)
+#             #uid = decoded_token['uid']
+#             uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
+#             return jsonify({"message": "User authenticated", "uid": uid}), 200
+#         except auth.AuthError as e:
+#             # Token is invalid
+#             return jsonify({"error": "Invalid credentials", "details": str(e)}), 401
+#     else:
+#         return jsonify({"error": "Missing ID token"}), 400
 
 #ticked
 @app.route('/events', methods=['POST'])
