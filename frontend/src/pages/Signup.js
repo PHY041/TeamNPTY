@@ -66,34 +66,29 @@ const Signup = () => {
           className="form auth__form signup-form"
           onSubmit={handleSubmit}
         >
-          <div className="row">
-            <div className="col">
-              <div className="form__field">
-                <label htmlFor="name">Name:* </label>
-                <input
-                  className="input input--text"
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Enter your name..."
-                  required
-                />
-              </div>
-            </div>
-            <div className="col">
-              <div className="form__field">
-                <label htmlFor="email">Email address:* </label>
-                <input
-                  className="input input--text"
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Enter your email..."
-                  required
-                />
-              </div>
-            </div>
+          <div className="form__field">
+            <label htmlFor="name">Name:* </label>
+            <input
+              className="input input--text"
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Enter your name..."
+              required
+            />
           </div>
+          <div className="form__field">
+            <label htmlFor="email">Email address:* </label>
+            <input
+              className="input input--text"
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter your email..."
+              required
+            />
+          </div>
+
           <div className="form__field">
             <label htmlFor="username">Username:* </label>
             <input

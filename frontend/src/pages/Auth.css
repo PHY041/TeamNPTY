@@ -24,14 +24,29 @@
   opacity: 0.2;
   z-index: -1;
 }
-.signup-form {
-  max-width: 700px; /* Adjust as needed */
-  margin: 0 auto;
+.card {
+  background-color: white;
+  height: 80vh;
+  width: 500px; /* Adjust the width of the card as needed */
+  max-width: 800px; /* Set a maximum width for the card */
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
 }
-.login-form {
-  max-width: 300px; /* Adjust as needed */
-  margin: 0 auto;
+.start-logo {
+  width: 200px;
+  height: auto;
+  align-self: center;
 }
+.card-body {
+  display: flex;
+  flex-direction: row; /* buttons placed horizontally */
+  justify-content: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
+  padding: 20px;
+}
+
 .auth__header {
   text-align: center;
   justify-content: center;
@@ -57,7 +72,7 @@
   margin: 0 auto;
 }
 .auth__form .form__field {
-  margin-bottom: 10px;
+  margin-bottom: 2px;
 }
 .auth__form .form__field label {
   font-weight: bold;
@@ -68,54 +83,57 @@
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-.centerButton {
-  font-size: 18px;
+
+.button {
+  font-size: 16px;
   font-weight: 500;
-  display: flex;
-  justify-content: center;
-  padding: 10px 20px;
-  background-color: lightskyblue;
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: rgb(97, 217, 225);
   color: black;
   border: none;
-  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  align-items: center;
+  border-radius: 25px;
+  transition: background-color 0.5s;
 }
-.centerButton:hover {
-  background-color: pink;
+.button:hover {
+  background-color: #0056b3;
+  color: white;
+}
+/*
+.centerButton {
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: lightskyblue;
+    color: black;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top:20px;
+    margin-bottom: 10px;
+    align-items: center;
 }
 
+.centerButton:hover {
+    background-color: pink;
+}
+*/
 .auth__alternative {
   margin-top: 20px;
   text-align: center;
 }
-a href {
+
+.auth a {
   text-decoration: none;
 }
-.card {
-  background-color: white;
-  height: 80vh;
-  width: 500px; /* Adjust the width of the card as needed */
-  max-width: 800px; /* Set a maximum width for the card */
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-}
-.start-logo {
-  width: 200px;
-  height: auto;
-  align-self: center;
-}
-.card-body {
-  display: flex;
-  flex-direction: row; /* buttons placed horizontally */
-  justify-content: center; /* Center items horizontally */
-  align-items: center; /* Center items vertically */
-  padding: 20px;
+.auth a:hover {
+  font-weight: 500;
 }
 
 .button-custom {
@@ -142,8 +160,4 @@ a href {
   background-color: pink;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   padding: 10px; /* Maintain padding on hover */
-}
-
-.auth a {
-  text-decoration: none;
 }

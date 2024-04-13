@@ -76,17 +76,13 @@ const Login = () => {
               required
             />
           </div>
-          {/* <div className="centerButton" role="button">
-            Login
-          </div> */}
 
           <button className="button button--primary" type="submit">
-            {" "}
             Log in
           </button>
 
           <div className="auth__actions">
-            <a href="/">Forget Password?</a>
+            <a href="/resetpassword">Forget Password?</a>
           </div>
         </form>
         <div className="auth__alternative">
