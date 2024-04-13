@@ -24,6 +24,7 @@ def save_data_to_realtime_database(data):
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
+
 #ticked
 @app.route('/')
 def home():
@@ -99,9 +100,8 @@ def login():
         if r.status_code == 200:
             # Parse the response data
             id_token = r.json().get('idToken')
-            refresh_token = r.json().get('refreshToken')
             # Return success response
-            return jsonify({'success': True, 'id_token': id_token, 'refresh-token': refresh_token}), 200
+            return jsonify({'success': True, 'id_token': id_token}), 200
         else:
             # Handle request failure
             return jsonify({'success': False, 'error': r.json()}), r.status_code

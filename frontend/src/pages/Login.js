@@ -7,11 +7,11 @@ const Login = () => {
     event.preventDefault();
 
     let formData = {
-      username: event.target.username.value,
+      email: event.target.email.value,
       password: event.target.password.value,
     };
 
-    fetch("http://127.0.0.1:5000/login/users/token/", {
+    fetch("http://127.0.0.1:5000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,12 +20,12 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("DATA:", data.access);
-        if (data.access) {
-          localStorage.setItem("token", data.access);
+        console.log("DATA:", data);
+        if (data.success) {
+          localStorage.setItem("token", data.id_token);
           window.location.href = "/app";
         } else {
-          alert("Username OR password did not work");
+          alert("Email OR password did not work");
         }
       });
 
@@ -53,13 +53,13 @@ const Login = () => {
           onSubmit={handleSubmit}
         >
           <div className="form__field">
-            <label htmlFor="formInput#text">Username: </label>
+            <label htmlFor="formInput#text">Email: </label>
             <input
               className="input input--text"
               id="formInput#text"
-              type="text"
-              name="username"
-              placeholder="Enter your username..."
+              type="email"
+              name="email"
+              placeholder="Enter your email..."
               required
             />
           </div>
@@ -79,14 +79,16 @@ const Login = () => {
             Login
           </div> */}
 
-          <button className="button button--primary" type="submit"> Log in
+          <button className="button button--primary" type="submit">
+            {" "}
+            Log in
           </button>
-          
+
           <div className="auth__actions">
             <a href="/">Forget Password?</a>
           </div>
         </form>
-        <div class="auth__alternative">
+        <div className="auth__alternative">
           <p>
             Don’t have an Account? <a href="/signup">Sign Up</a>
           </p>

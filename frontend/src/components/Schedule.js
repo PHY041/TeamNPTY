@@ -22,8 +22,8 @@ const Scheduler = () => {
     const fetchData = async () => {
       const manager = new DataManager({
         //replace the following url with our own Django endpoint
-        // url: "http://127.0.0.1:5000/my-events",
-        url: "https://services.syncfusion.com/react/production/api/schedule",
+        url: "http://127.0.0.1:5000/my-events",
+        // url: "https://services.syncfusion.com/react/production/api/schedule",
         adaptor: new ODataV4Adaptor(),
       });
       await manager.ready;

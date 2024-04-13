@@ -34,7 +34,7 @@ const Signup = () => {
       .then((data) => {
         console.log("DATA:", data);
         if (data.success) {
-          window.location.href = "/";
+          window.location.href = "/login";
         } else {
           console.log("Success: ", data.success);
           alert("Error creating user");
@@ -136,9 +136,10 @@ const Signup = () => {
             Sign up
           </div> */}
 
-          <button className="button button--primary" type="submit"> Log in
+          <button className="button button--primary" type="submit">
+            {" "}
+            Sign up
           </button>
-
         </form>
         <div className="auth__alternative">
           <p>
