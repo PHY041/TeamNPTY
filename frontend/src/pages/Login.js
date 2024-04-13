@@ -24,6 +24,7 @@ const Login = () => {
         if (data.success) {
           localStorage.setItem("token", data.id_token);
           window.location.href = "/app";
+
         } else {
           alert("Email OR password did not work");
         }

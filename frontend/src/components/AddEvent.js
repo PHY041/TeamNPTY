@@ -6,23 +6,39 @@ import "../pages/NavPages.css"; // Import CSS file for styling
 
 const AddEvent = () => {
   const [eventDescription, setEventDescription] = useState("");
+  const [startTimeUTC, setStartTimeUTC] = useState("");
+  const [endTimeUTC, setEndTimeUTC] = useState("");
 
   const handleEventDescriptionChange = (event) => {
     setEventDescription(event.target.value);
+  };
+
+  // Note: This handler will convert local Singapore time to UTC and save it in state
+  const handleDatetimeLocalInputChange = (inputId, event) => {
+    const localDateTime = event.target.value;
+    const timezoneOffset = "+08:00"; // Singapore Timezone Offset
+    const localDateTimeWithTimezone = `${localDateTime}:00${timezoneOffset}`; // Append seconds and timezone
+    const date = new Date(localDateTimeWithTimezone);
+    const utcDateTime = date.toISOString();
+
+    // Update the corresponding state based on inputId
+    if (inputId === "startOfEvent") {
+      setStartTimeUTC(utcDateTime);
+    } else if (inputId === "endOfEvent") {
+      setEndTimeUTC(utcDateTime);
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add the new event data to the existing event data
     let token = localStorage.getItem("token");
-    let startTime = `${document.getElementById("startOfEvent").value}:00Z`;
-    let endTime = `${document.getElementById("endOfEvent").value}:00Z`;
 
     let formData = {
       title: event.target.event_title.value,
       description: event.target.event_description.value,
-      startofevent: startTime,
-      endofevent: endTime,
+      startofevent: startTimeUTC,
+      endofevent: endTimeUTC,
       location: event.target.location.value,
       isonline: event.target.isonline.checked,
     };
@@ -36,11 +52,14 @@ const AddEvent = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
           window.location.href = "/app";
           console.log("Event created successfully");
         } else {
+          console.log("Error: ", data.error);
+          console.log("Success: ", data.success);
           alert("Error creating event");
         }
       })
@@ -85,6 +104,9 @@ const AddEvent = () => {
                 type="datetime-local"
                 id="startOfEvent"
                 name="startOfEvent"
+                onChange={(e) =>
+                  handleDatetimeLocalInputChange("startOfEvent", e)
+                }
                 required
               />
             </div>
@@ -94,6 +116,9 @@ const AddEvent = () => {
                 type="datetime-local"
                 id="endOfEvent"
                 name="endOfEvent"
+                onChange={(e) =>
+                  handleDatetimeLocalInputChange("endOfEvent", e)
+                }
                 required
               />
             </div>

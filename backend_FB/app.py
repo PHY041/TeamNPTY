@@ -21,9 +21,11 @@ def save_data_to_realtime_database(data):
     new_ref.set(data)
     return {"result": "Data saved to Realtime Database", "data": data}  # return a serializable object
 
+
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
+
 
 #ticked
 @app.route('/')
@@ -99,9 +101,12 @@ def login():
         # If the request is successful
         if r.status_code == 200:
             # Parse the response data
+            
+            # user_id = r.json().get('localId')
             id_token = r.json().get('idToken')
+            # user_data = r.json()
             # Return success response
-            return jsonify({'success': True, 'id_token': id_token}), 200
+            return jsonify({'success': True, 'id_token':id_token}), 200
         else:
             # Handle request failure
             return jsonify({'success': False, 'error': r.json()}), r.status_code
@@ -139,15 +144,19 @@ def create_event():
     # Extract the ID token from the Authorization header
     id_token = request.headers.get('Authorization')
     if not id_token:
-        return jsonify({"error": "Authorization token is required"}), 401
-
+        return jsonify({"error": "Authorization token is required","success":False}), 401
+    
+    if id_token.startswith('Bearer '):
+    # Strip the prefix 'Bearer ' from the token
+        id_token = id_token.split('Bearer ')[1]
+        
     try:
         # Verify the ID token and get the user's UID
         decoded_token = auth.verify_id_token(id_token)
-        #uid = decoded_token['uid']
-        uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
-    except auth.AuthError:
-        return jsonify({"error": "Invalid or expired token"}), 401
+        uid = decoded_token['uid']
+        # uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
+    except:
+        return jsonify({"error": "Invalid or expired token","success":False, "id_token":id}), 401
 
     # Assuming event_data is structured correctly and sanitized
     event_data = request.json
@@ -156,7 +165,7 @@ def create_event():
     ref = get_collection_ref('events')
     new_ref = ref.push()
     new_ref.set(event_data)
-    return jsonify({"message": "Event created", "id": new_ref.key}), 201
+    return jsonify({"message": "Event created", "id": new_ref.key, "success":True}), 201
 
 #ticked
 @app.route('/my-events', methods=['GET'])
@@ -166,11 +175,15 @@ def get_user_events():
     if not id_token:
         return jsonify({"error": "Authorization token is required"}), 401
 
+    if id_token.startswith('Bearer '):
+    # Strip the prefix 'Bearer ' from the token
+        id_token = id_token.split('Bearer ')[1]
+        
     try:
         # Verify the ID token and get the user's UID
         decoded_token = auth.verify_id_token(id_token)
-        #uid = decoded_token['uid']
-        uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
+        uid = decoded_token['uid']
+        # uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
     except auth.AuthError:
         return jsonify({"error": "Invalid or expired token"}), 401
 
