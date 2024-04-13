@@ -127,14 +127,17 @@ const Signup = () => {
               required
             />
           </div>
-          <div
+          {/* <div
             className="centerButton"
             role="button"
             onClick={handleSubmit}
             value="Sign up"
           >
             Sign up
-          </div>
+          </div> */}
+
+          <button className="button button--primary" type="submit"> Log in
+          </button>
 
         </form>
         <div className="auth__alternative">
