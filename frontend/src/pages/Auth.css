@@ -1,0 +1,149 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+.auth {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/pattern.jpg");
+  opacity: 0.2;
+  z-index: -1;
+}
+.signup-form {
+  max-width: 700px; /* Adjust as needed */
+  margin: 0 auto;
+}
+.login-form {
+  max-width: 300px; /* Adjust as needed */
+  margin: 0 auto;
+}
+.auth__header {
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.auth__header h4 {
+  text-align: center;
+}
+
+.auth__header span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.auth__actions,
+.auth__alternative {
+  margin-top: 20px;
+  text-align: center;
+  justify-content: center;
+}
+#logo {
+  width: 40px;
+  margin: 0 auto;
+}
+.auth__form .form__field {
+  margin-bottom: 10px;
+}
+.auth__form .form__field label {
+  font-weight: bold;
+}
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.centerButton {
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: lightskyblue;
+  color: black;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.centerButton:hover {
+  background-color: pink;
+}
+
+.auth__alternative {
+  margin-top: 20px;
+  text-align: center;
+}
+a href {
+  text-decoration: none;
+}
+.card {
+  background-color: white;
+  height: 80vh;
+  width: 500px; /* Adjust the width of the card as needed */
+  max-width: 800px; /* Set a maximum width for the card */
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+}
+.start-logo {
+  width: 200px;
+  height: auto;
+  align-self: center;
+}
+.card-body {
+  display: flex;
+  flex-direction: row; /* buttons placed horizontally */
+  justify-content: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
+  padding: 20px;
+}
+
+.button-custom {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  width: 160px; /* Set fixed width for buttons */
+  height: 80px; /* Set fixed height for buttons */
+  margin: 0 15px;
+  transition: box-shadow 0.3s;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: lightblue;
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+
+.button-custom:hover,
+.button-custom:focus {
+  background-color: pink;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  padding: 10px; /* Maintain padding on hover */
+}
+
+.auth a {
+  text-decoration: none;
+}

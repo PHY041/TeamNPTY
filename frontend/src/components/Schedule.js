@@ -5,13 +5,11 @@ import {
   ScheduleComponent,
   Day,
   Week,
-  WorkWeek,
   Month,
   ViewsDirective,
   ViewDirective,
 } from "@syncfusion/ej2-react-schedule";
-import "../pages/main.css"; // import { DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
-// import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
+import "../pages/NavPages.css";
 import { DataManager, ODataV4Adaptor } from "@syncfusion/ej2-data";
 // Registering Syncfusion license key
 registerLicense(
@@ -19,7 +17,6 @@ registerLicense(
 );
 
 const Scheduler = () => {
-
   const [dataManager, setDataManager] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -71,7 +68,7 @@ const Scheduler = () => {
     })
       .then((response) => {
         if (response.ok) {
-          window.location.href = "/home";
+          window.location.href = "/app";
           console.log("Event updated successfully");
         } else {
           alert("Error updating event");
@@ -80,7 +77,6 @@ const Scheduler = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    console.log(args.data);
     console.log(formData);
     console.log("event added");
     // Use args.data to access the event data
@@ -113,7 +109,7 @@ const Scheduler = () => {
     })
       .then((response) => {
         if (response.ok) {
-          window.location.href = "/home";
+          window.location.href = "/app";
           console.log("Event updated successfully");
         } else {
           alert("Error updating event");
@@ -122,7 +118,6 @@ const Scheduler = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    console.log(args.data);
     console.log(formData);
     console.log("event updated");
     // Use args.data to access the event data
@@ -156,7 +151,7 @@ const Scheduler = () => {
     })
       .then((response) => {
         if (response.ok) {
-          window.location.href = "/home";
+          window.location.href = "/app";
           console.log("Event deleted successfully");
         } else {
           alert("Error deleting event");
@@ -165,12 +160,10 @@ const Scheduler = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    console.log(args.data);
     console.log(formData);
     console.log("event deleted");
     // Use args.data to access the event data
   };
-
   return (
     <div className="schedule-control-section">
       <div className="control-section">
@@ -180,6 +173,7 @@ const Scheduler = () => {
             height="100%"
             currentView="Week"
             eventSettings={{ dataSource: dataManager, fields: fieldsData }}
+
             readonly={false}
             actionBegin={(args) => {
               if (args.requestType === "eventCreate") {
@@ -194,10 +188,9 @@ const Scheduler = () => {
             <ViewsDirective>
               <ViewDirective option="Day" />
               <ViewDirective option="Week" />
-              <ViewDirective option="WorkWeek" />
               <ViewDirective option="Month" />
             </ViewsDirective>
-            <Inject services={[Day, Week, WorkWeek, Month]} />
+            <Inject services={[Day, Week, Month]} />
           </ScheduleComponent>
         </div>
       </div>

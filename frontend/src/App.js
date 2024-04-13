@@ -1,24 +1,26 @@
+// App.js
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Login from "./pages/Login";
+import {Navigate,BrowserRouter as Router,Route,Routes} from "react-router-dom";
 import Home from "./pages/Home";
-import Addevent from "./pages/Addevent";
-import Uploadimage from "./pages/Uploadimage";
+import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import NavPages from "./pages/NavPages";
 
-const App = () => {
+function App() {
   return (
-    <>
-      <Routes>
-        <Route path="/home" element={<Home />}></Route>
-        <Route path="/addevent" element={<Addevent />}></Route>
-        <Route path="/uploadimage" element={<Uploadimage />}></Route>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/signup" element={<Signup />}></Route>
-      </Routes>
-    </>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/app/*" element={<NavPages />} />
+          {/* Add a wildcard route to redirect to "/schedule" */}
+          <Route path="/app" element={<Navigate to="/app/schedule" />} />
+        </Routes>
+      </div>
+    </Router>
   );
-};
+}
 
 export default App;
