@@ -1,15 +1,18 @@
 from flask import Flask, jsonify, request # Corrected import statement
 import firebase_admin
-from firebase_admin import credentials, auth
+from firebase_admin import credentials, auth, storage
 from firebase_admin import db
 from readcalonline import get_event_details_from_image
 from flask_cors import CORS
 import requests
+from werkzeug.utils import secure_filename
+
 
 # Initialize the Firebase app with Realtime Database URL
 cred = credentials.Certificate(r'compassproject-dbf1c-firebase-adminsdk-vskzq-c9d334f0eb.json')
 firebase_admin.initialize_app(cred, {
-    'databaseURL' : 'https://compassproject-dbf1c-default-rtdb.asia-southeast1.firebasedatabase.app/'
+    'databaseURL' : 'https://compassproject-dbf1c-default-rtdb.asia-southeast1.firebasedatabase.app/',
+    'storageBucket': 'compassproject-dbf1c.appspot.com'
 })
 
 
@@ -64,19 +67,6 @@ def create_user():
         # Handle other exceptions
         return jsonify({'success': False, 'error': str(e)}), 500
 
-'''
-#works for realtime data base, need to change to user authentication 
-@app.route('/signup', methods=['POST'])
-def create_user():
-    """Create a new user."""
-    user_data = request.json
-    ref = get_collection_ref('users')
-    new_ref = ref.push()
-    new_ref.set(user_data)
-    return jsonify({"message": "User created", "id": new_ref.key}), 201
-'''
-
-#just need to call https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -116,27 +106,6 @@ def login():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
-#will not work 
-# @app.route('/login', methods=['POST'])
-# def login():
-#     # Get the ID token sent by the client
-#     email = request.json.get('email')
-#     password = request.json.get('password')
-#     id_token = request.json.get('idToken')
-#     if (email):
-#         try:
-#             # Check the token against the Firebase Auth API
-#             user = auth.get_user_by_email(email)
-            
-#             decoded_token = auth.verify_id_token(id_token)
-#             #uid = decoded_token['uid']
-#             uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
-#             return jsonify({"message": "User authenticated", "uid": uid}), 200
-#         except auth.AuthError as e:
-#             # Token is invalid
-#             return jsonify({"error": "Invalid credentials", "details": str(e)}), 401
-#     else:
-#         return jsonify({"error": "Missing ID token"}), 400
 
 #ticked
 @app.route('/events', methods=['POST'])
@@ -247,18 +216,42 @@ def extract_events():
     except :
         return jsonify({"error": "Invalid or expired token","success":False}), 401
 
-    data = request.get_json()
-    prompt_content = data.get('prompt_content')
-    image_url = data.get('image_url')
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
 
-    if not prompt_content or not image_url:
+    file = request.files['file']
+    
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    
+    filename = secure_filename(file.filename)
+
+    # The file will be uploaded directly to Firebase Storage, so no need to save locally
+    # Create a Firebase Storage reference
+    bucket = storage.bucket()
+    blob = bucket.blob(filename)
+
+    # Upload the file
+    blob.upload_from_string(
+        file.read(),
+        content_type=file.content_type
+    )
+    
+    # Make the blob publicly viewable
+    blob.make_public()
+
+    # Generate the URL
+    image_url = blob.public_url
+
+    if not image_url:
         return jsonify({"error": "Missing prompt_content or image_url", "success":False}), 400
 
     # Extract event details from the image
-    event_details = get_event_details_from_image(prompt_content, image_url)
+    event_details = get_event_details_from_image(image_url)
     
     # Add the user's UID to the event details
     event_details['user_id'] = uid
+    event_details['description'] = request.form.get('description')
 
     ref = get_collection_ref('events')
     new_ref = ref.push()
