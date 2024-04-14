@@ -61,35 +61,30 @@ const Profile = () => {
       </a>
       <h3>Edit Profile</h3>
       <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div className="col">
-            <div className="form__field">
-              <label>Name*</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={profileData.name}
-                onChange={handleInputChange}
-                className="user-real-name"
-                required
-              />
-            </div>
-          </div>
-          <div className="col">
-            <div className="form__field">
-              <label htmlFor="username">Username*</label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                value={profileData.username}
-                onChange={handleInputChange}
-                className="user-username"
-                required
-              />
-            </div>
-          </div>
+        <div className="form__field">
+          <label>Name*</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={profileData.name}
+            onChange={handleInputChange}
+            className="user-real-name"
+            required
+          />
+        </div>
+
+        <div className="form__field">
+          <label htmlFor="username">Username*</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={profileData.username}
+            onChange={handleInputChange}
+            className="user-username"
+            required
+          />
         </div>
         <div className="form__field">
           <label htmlFor="email">Email*</label>

@@ -1,122 +1,109 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-.application-page {
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  min-height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+.application-page{
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative; 
+    min-height: 100vh;
 }
-.application-page::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("../assets/pattern.jpg");
-  opacity: 0.2;
-  z-index: -1;
+.application-page::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/pattern.jpg");
+    opacity: 0.2;
+    z-index: -1;
 }
 /* for any tab that is active*/
-.active {
-  background-color: rgb(200, 130, 175);
+.active{
+    border-bottom: 2px solid black;
+    background-color: rgb(219, 171, 171, 0.5);
 }
-nav {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgb(193, 193, 211);
-  padding: 1px 5%;
-  position: sticky;
-  top: 0;
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgb(221, 232, 231);
+    padding: 3px 3%;
+    position: sticky;
+    top:0;
+    border-bottom: 2px solid #ccc; /*gray separator between navbar and web body*/
 }
-.compass-logo {
-  width: 45px;
+.compass-logo{
+    height: 60px;
+    width: auto;
+    align-self: flex-start;
 }
-nav ul {
-  display: flex;
-  /*text-align: center; /* see if need remove*/
+nav ul{
+    display: flex;
+    align-items: center;
+    padding: 0;
+    /*text-align: center; /* see if need remove*/
 }
-nav ul li {
-  list-style-type: none;
+nav ul li{
+    list-style-type: none;
 }
-nav ul li a {
-  display: block;
-  text-decoration: none;
-  padding: 0.5rem;
-  margin: 10px 10px;
-  border-radius: 0.5rem;
-  font-size: 16px;
-  font-weight: 500;
-  color: rgb(255, 255, 255);
-  cursor: pointer;
+nav ul li a{
+    display: block;
+    text-decoration: none;
+    padding: 0.5rem;
+    margin: 10px 10px;
+    border-radius: 0.5rem;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    text-align: center;
 }
-nav ul li a.logout-nav {
-  background-color: rgba(0, 0, 0, 0.1); /* Slight red background */
+nav ul li a:not(.active):hover{
+    background-color: rgb(113, 121, 125);
+    color: white;
+    transition: 0.3s;
 }
-nav ul li a:not(.active):hover {
-  background-color: gray;
-  transition: 0.3s;
-}
-.add-event,
-.edit-profile,
-.upload-image {
-  background-color: white;
-  max-width: 600px;
-  margin: 0 auto;
-  margin-top: 30px;
-  border: 2px solid #ccc;
-  border-radius: 20px;
-  padding: 10px;
+.add-event, .edit-profile, .upload-image {
+    background-color: white;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 10px;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
 }
 label {
-  display: block;
-  margin-bottom: 2px;
-  font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+    font-weight: 500;
 }
-h3 {
-  margin-bottom: 20px;
-  text-align: center;
+h4{
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.form__field {
-  padding: 8px;
-}
 .form__field input[type="text"],
 .form__field input[type="email"],
 .form__field input[type="password"],
 .form__field input[type="file"],
+.form__field input[type='datetime-local'],
 textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  background-color: #f0f8ff;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #f0f8ff;
 }
-textarea {
-  resize: vertical;
-  box-sizing: border-box;
+textarea{
+    resize: vertical;
+    box-sizing: border-box;
 }
 .form__field input[type="checkbox"] {
-  margin-left: 0.5rem;
-}
-.form__field input[type="datetime-local"] {
-  background-color: #f0f8ff;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-.date-input {
-  display: inline-block; /* Ensures inputs are displayed in a row */
-  width: calc(50% - 0.5rem); /* Adjust the width of date inputs */
-  margin-right: 1rem; /* Adjust the margin between date inputs */
-}
-.date-input:last-child {
-  margin-right: 0; /* Remove margin from the last date input */
+    margin-left: 0.5rem;
+    margin-bottom: 20px;
 }
 
 .form__field input[type="text"]:focus,
@@ -124,32 +111,98 @@ textarea {
 .form__field input[type="password"]:focus,
 .form__field input[type="file"]:focus,
 textarea:focus,
-.form__field input[type="datetime-local"]:focus,
-.form__field
-  input[type="datetime-local"]:active
-  .form__field
-  input[type="text"]:active,
+.form__field input[type='datetime-local']:focus,
+.form__field input[type='datetime-local']:active
+.form__field input[type="text"]:active,
 .form__field input[type="email"]:active,
 .form__field input[type="password"]:active,
 .form__field input[type="file"]:active,
 textarea:active {
-  background-color: #eaf0f7;
+    background-color: #d6e5f4;
 }
 .submit-btn {
-  font-size: 15px;
-  display: block;
-  width: 200px;
-  margin: 0 auto;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: rgb(97, 217, 225);
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: background-color 0.5s;
 }
-
+ 
 .submit-btn:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
+    color: white;
+}
+nav .menu-toggle{
+    display: none;
+}
+/* Media Queries*/
+@media (max-width:700px){
+
+    nav .menu-toggle{
+        font-size: 25px;
+        display:block;
+        align-self: center;
+        cursor:pointer;
+        border: none;
+        background-color: transparent;
+        z-index: 1000;
+    }
+    nav .menu-toggle:hover{
+        background-color: #ccc;
+        transform: scale(1.1);
+        transition: all .2s ease;
+    }
+    nav {
+        top:0;
+        display: flex;
+    }
+    nav ul {
+        display: none;
+        margin-top: 5px;
+    }
+    nav ul.open {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgb(221, 232, 231); /* Background color of the expanded menu */
+        z-index: 10000; /* Ensure it's below the toggle button */
+    }
+    nav ul li{
+        align-items: center;
+        justify-content: center;
+        width: 80%;
+    }
+    nav ul li a{
+        vertical-align: middle;
+    }
+    .active{
+        border:none;
+    }
+    
+    .add-event,
+    .edit-profile,
+    .upload-image {
+        max-width: 90%; 
+        margin: 0 auto; 
+        margin-top: 20px; 
+        padding: 20px; 
+        border: 2px solid #ccc;
+        border-radius: 20px;
+    }
+    
 }
 
 /*
@@ -174,4 +227,25 @@ textarea:active {
     width: 20px;
     cursor: pointer;
 }
+
+    .close-button{
+        display: none;
+    }
+    nav ul.open .close-button{
+        font-size: 25px;
+        position: absolute; /* allows the close button to be on RHS
+        top: 0.8rem;
+        right: 2rem;
+        display: block;
+        border:none;
+        background-color: transparent;
+    }
+    nav ul.open .close-button:hover{
+        background-color: #ccc;
+        transform: scale(1.1);
+        transition: all .2s ease;
+    }
+    nav ul.close .close-button{
+        display: none;
+    }
 */

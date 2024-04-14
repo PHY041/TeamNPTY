@@ -182,6 +182,7 @@ const Scheduler = () => {
       <div className="control-section">
         <div className="control-wrapper">
           <ScheduleComponent
+            className="schedule-component"
             width="100%"
             height="100%"
             currentView="Week"
