@@ -129,6 +129,10 @@ def create_event():
 
     # Assuming event_data is structured correctly and sanitized
     event_data = request.json
+    startofevent = event_data['startofevent']
+    endofevent = event_data['endofevent']
+    if startofevent >= endofevent:
+        return jsonify({"error": "Start of event cannot be later than end of event","success":False}), 401
     event_data['user_id'] = uid  # Set the UID in the event data
 
     ref = get_collection_ref('events')

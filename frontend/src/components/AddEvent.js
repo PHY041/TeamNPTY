@@ -60,7 +60,7 @@ const AddEvent = () => {
         } else {
           console.log("Error: ", data.error);
           console.log("Success: ", data.success);
-          alert("Error creating event");
+          alert(data.error);
         }
       })
       .catch((error) => {
