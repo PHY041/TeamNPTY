@@ -235,20 +235,24 @@ def extract_events():
     if not id_token:
         return jsonify({"error": "Authorization token is required"}), 401
 
+    if id_token.startswith('Bearer '):
+    # Strip the prefix 'Bearer ' from the token
+        id_token = id_token.split('Bearer ')[1]
+        
     try:
         # Verify the ID token and get the user's UID
         decoded_token = auth.verify_id_token(id_token)
-        #uid = decoded_token['uid']
-        uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
-    except auth.AuthError:
-        return jsonify({"error": "Invalid or expired token"}), 401
+        uid = decoded_token['uid']
+        # uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
+    except :
+        return jsonify({"error": "Invalid or expired token","success":False}), 401
 
     data = request.get_json()
     prompt_content = data.get('prompt_content')
     image_url = data.get('image_url')
 
     if not prompt_content or not image_url:
-        return jsonify({"error": "Missing prompt_content or image_url"}), 400
+        return jsonify({"error": "Missing prompt_content or image_url", "success":False}), 400
 
     # Extract event details from the image
     event_details = get_event_details_from_image(prompt_content, image_url)
@@ -260,7 +264,7 @@ def extract_events():
     new_ref = ref.push()
     
     new_ref.set(event_details)
-    return jsonify({"message": "Event created", "id": new_ref.key}), 201
+    return jsonify({"message": "Event created", "id": new_ref.key,"success":True}), 201
 
 
 

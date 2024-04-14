@@ -13,24 +13,24 @@ const Uploadimage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     let token = localStorage.getItem("token");
-    const fileInput = event.target.file;
-    let file = fileInput.files[0];
-    let formData = {
-      file: file,
-      description: event.target.description.value,
-    };
+    const fileInput = document.getElementById('file');
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('file', file); // Append the file under the 'file' key
+    formData.append('description', event.target.description.value); // Append the description
+
     //replace the url with the url of the api
-    fetch("http://127.0.0.1:8000/api/users/token/", {
+    fetch("http://127.0.0.1:5000/extract", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(formData),
+      body:formData,
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("DATA:", data);
-        if (data) {
+        if (data.success) {
           alert("Image uploaded successfully");
           window.location.href = "/app";
         } else {
