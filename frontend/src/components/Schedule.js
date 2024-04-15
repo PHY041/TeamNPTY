@@ -5,14 +5,12 @@ import {
   ScheduleComponent,
   Day,
   Week,
-  WorkWeek,
   Month,
   ViewsDirective,
   ViewDirective,
 } from "@syncfusion/ej2-react-schedule";
-import "../pages/main.css"; // import { DataManager, ODataV4Adaptor } from '@syncfusion/ej2-data';
-// import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
-import { DataManager, ODataV4Adaptor } from "@syncfusion/ej2-data";
+import "../pages/NavPages.css";
+import Loading from "./Loading";
 // Registering Syncfusion license key
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXxcdXVVRWJdUUByXkE="
@@ -20,31 +18,48 @@ registerLicense(
 
 const Scheduler = () => {
 
-  const [dataManager, setDataManager] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      const manager = new DataManager({
-        //replace the following url with our own Django endpoint
-        // url: "http://127.0.0.1:5000/my-events",
-        url: "https://services.syncfusion.com/react/production/api/schedule",
-        adaptor: new ODataV4Adaptor(),
-      });
-      await manager.ready;
-      setDataManager(manager);
-    };
-    fetchData();
-  }, []);
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const fieldsData = {
-    id: { name: "Id" },
-    // subject: { name: "Title" }, //this is for the our own compass app
-    subject: { name: "Subject" },
-    location: { name: "Location" },
-    description: { name: "Description" },
-    startTime: { name: "StartTime" },
-    endTime: { name: "EndTime" },
-    isOnline: { name: "IsOnline" },
-  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoading(true); // Start loading
+    fetch("http://127.0.0.1:5000/my-events", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Transform the data from Firebase format to the format expected by Syncfusion Scheduler
+        console.log(data);
+        const firebaseDataArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key]
+        }));
+    
+        // Now transform the array of Firebase data to the format expected by Syncfusion Scheduler
+        const transformedEvents = firebaseDataArray.map(event => ({
+          Id: event.id,
+          Subject: event.title,
+          StartTime: new Date(event.startofevent),
+          EndTime: new Date(event.endofevent),
+          Description: event.description,
+          Location: event.location,
+          IsOnline: event.isonline,
+          // ... add other necessary fields
+        }));
+    
+        setEvents(transformedEvents);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching events:", error);
+        setIsLoading(false);
+      });
+    }, []);
+    
   const handleAddEvent = (args) => {
     // Send request to external API to add event
     let token = localStorage.getItem("token");
@@ -71,7 +86,7 @@ const Scheduler = () => {
     })
       .then((response) => {
         if (response.ok) {
-          window.location.href = "/home";
+          window.location.href = "/app";
           console.log("Event updated successfully");
         } else {
           alert("Error updating event");
@@ -80,7 +95,6 @@ const Scheduler = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    console.log(args.data);
     console.log(formData);
     console.log("event added");
     // Use args.data to access the event data
@@ -113,7 +127,7 @@ const Scheduler = () => {
     })
       .then((response) => {
         if (response.ok) {
-          window.location.href = "/home";
+          window.location.href = "/app";
           console.log("Event updated successfully");
         } else {
           alert("Error updating event");
@@ -122,7 +136,6 @@ const Scheduler = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    console.log(args.data);
     console.log(formData);
     console.log("event updated");
     // Use args.data to access the event data
@@ -147,7 +160,7 @@ const Scheduler = () => {
       isonline: args.data[0].isOnline,
     };
     fetch(`http://127.0.0.1:5000/events/${id}`, {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -156,7 +169,7 @@ const Scheduler = () => {
     })
       .then((response) => {
         if (response.ok) {
-          window.location.href = "/home";
+          window.location.href = "/app";
           console.log("Event deleted successfully");
         } else {
           alert("Error deleting event");
@@ -165,21 +178,25 @@ const Scheduler = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-    console.log(args.data);
     console.log(formData);
-    console.log("event deleted");
+
     // Use args.data to access the event data
   };
-
   return (
     <div className="schedule-control-section">
+      {isLoading ? (
+        <div className="loading-container">
+          <Loading />
+        </div>
+      ) : (
       <div className="control-section">
         <div className="control-wrapper">
           <ScheduleComponent
+            className="schedule-component"
             width="100%"
             height="100%"
             currentView="Week"
-            eventSettings={{ dataSource: dataManager, fields: fieldsData }}
+            eventSettings={{ dataSource: events }}
             readonly={false}
             actionBegin={(args) => {
               if (args.requestType === "eventCreate") {
@@ -194,13 +211,13 @@ const Scheduler = () => {
             <ViewsDirective>
               <ViewDirective option="Day" />
               <ViewDirective option="Week" />
-              <ViewDirective option="WorkWeek" />
               <ViewDirective option="Month" />
             </ViewsDirective>
-            <Inject services={[Day, Week, WorkWeek, Month]} />
+            <Inject services={[Day, Week, Month]} />
           </ScheduleComponent>
         </div>
       </div>
+      )}
     </div>
   );
 };
