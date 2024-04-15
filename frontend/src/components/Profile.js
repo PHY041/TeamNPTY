@@ -68,7 +68,7 @@ const Profile = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoading(true); // Start loading
-    fetch("http://127.0.0.1:5000/profile", {
+    fetch("http://127.0.0.1:5000/my-events-summary", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -76,7 +76,7 @@ const Profile = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        const formattedEventData = Object.keys(data[0]).map(day => {
+        const formattedEventData = Object.keys(data[0]).map((day) => {
           return { day: day, duration: data[0][day] };
         });
         setEventData(formattedEventData);
@@ -121,7 +121,6 @@ const Profile = () => {
                 className="form auth__form reset-pw-form"
                 onSubmit={handleSubmit}
               >
-
                 <div className="form__field">
                   <label htmlFor="reset_password">New password:* </label>
                   <input
