@@ -5,15 +5,15 @@ import EventsChart from "./EventsChart";
 import Loading from "./Loading";
 
 const Profile = () => {
-  const event_data = [
-    { day: "Monday", duration: 3 }, // duration in hours
-    { day: "Tuesday", duration: 2 },
-    { day: "Wednesday", duration: 8 },
-    { day: "Thursday", duration: 4 },
-    { day: "Friday", duration: 1 },
-    { day: "Saturday", duration: 0 },
-    { day: "Sunday", duration: 2 },
-  ];
+  // const event_data = [
+  //   { day: "Monday", duration: 3 }, // duration in hours
+  //   { day: "Tuesday", duration: 2 },
+  //   { day: "Wednesday", duration: 8 },
+  //   { day: "Thursday", duration: 4 },
+  //   { day: "Friday", duration: 1 },
+  //   { day: "Saturday", duration: 0 },
+  //   { day: "Sunday", duration: 2 },
+  // ];
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (event) => {
@@ -63,7 +63,7 @@ const Profile = () => {
     console.log(formData);
   };
   const [eventSummary, setEventSummary] = useState("");
-  // const [event_data, setEvent_data] = useState([]);
+  const [event_data, setEventData] = useState([]);
   // Fetch past events data
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -76,9 +76,13 @@ const Profile = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // setEvent_data(data.event_data);
+        const formattedEventData = Object.keys(data[0]).map(day => {
+          return { day: day, duration: data[0][day] };
+        });
+        setEventData(formattedEventData);
+        console.log(formattedEventData);
         // Assume calculateSummary is a function to analyze events data
-        setEventSummary(calculateSummary(data.summary));
+        setEventSummary(calculateSummary(data[1].Summary));
         setIsLoading(false);
       })
       .catch((error) => {
