@@ -1,17 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import "../pages/NavPages.css";
 import Loading from "./Loading";
 
 const Uploadimage = () => {
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState("");
   const [eventDescription, setEventDescription] = useState("");
+  const handlePaste = useCallback(async (event) => {
+    if (event.clipboardData && event.clipboardData.items) {
+      const items = event.clipboardData.items;
 
+      for (const item of items) {
+        if (item.type.indexOf("image") === 0) {
+          const blob = item.getAsFile();
+
+          // Set the image in the component state
+          setImage(blob);
+
+          // Create a preview
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setPreview(reader.result);
+          };
+          reader.readAsDataURL(blob);
+        }
+      }
+    }
+  }, []);
+
+  // Attach the paste event listener to the window
+  useEffect(() => {
+    window.addEventListener("paste", handlePaste);
+
+    // Cleanup the event listener
+    return () => {
+      window.removeEventListener("paste", handlePaste);
+    };
+  }, [handlePaste]);
+
+  const [isLoading, setIsLoading] = useState(false);
   const handleEventDescriptionChange = (event) => {
     setEventDescription(event.target.value);
   };
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +51,11 @@ const Uploadimage = () => {
     const fileInput = document.getElementById("file");
     const file = fileInput.files[0];
     const formData = new FormData();
-    formData.append("file", file); // Append the file under the 'file' key
+    if (image) {
+      formData.append("file", image);
+    } else {
+      formData.append("file", file);
+    } // Append the file under the 'file' key
     formData.append("description", event.target.description.value); // Append the description
 
     setIsLoading(true); // Start loading
@@ -67,14 +103,19 @@ const Uploadimage = () => {
           >
             <div className="form__field">
               <label htmlFor="file">Upload image (.png, .jpg, .webp): </label>
+              {/* <FileInput /> */}
               <input
                 type="file"
                 className="input input--file"
                 id="file"
                 name="file"
                 accept="image/png, image/jpeg, image/webp"
-                required
+                
               />
+              <div className="input input--image">
+                <p>Paste an image here...</p>
+              {preview && <img src={preview} className="file-image" alt="Preview" />}
+              </div>
             </div>
             <div className="form__field">
               <textarea

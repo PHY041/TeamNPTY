@@ -24,7 +24,6 @@ const Login = () => {
         if (data.success) {
           localStorage.setItem("token", data.id_token);
           window.location.href = "/app";
-
         } else {
           alert("Email OR password did not work");
         }
@@ -40,10 +39,9 @@ const Login = () => {
           <h4>
             <span>
               <a href="/">
-                <img src={logo} alt="Compass logo" id="logo" />
+                <img src={logo} alt="Compass logo" className="image-logo" />
               </a>
-            </span>{" "}
-            Login{" "}
+            </span>
           </h4>
         </div>
 

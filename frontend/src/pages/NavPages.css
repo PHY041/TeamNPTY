@@ -39,6 +39,12 @@ nav{
     width: 100px;
     align-self: flex-start;
 }
+.file-image{
+    height: 200px;
+    width: 500px;
+    align-self: flex-start;
+
+}
 nav ul{
     display: flex;
     align-items: center;
@@ -253,4 +259,10 @@ nav .menu-toggle{
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  
+  .input.input--image{
+    margin-bottom:20px;
+    background-color:rgb(236, 250, 255);
+    
   }

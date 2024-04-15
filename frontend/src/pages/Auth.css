@@ -161,3 +161,9 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   padding: 10px; /* Maintain padding on hover */
 }
+
+.image-logo{
+  width: 100px; /* fixed width, or use 'auto' if you want to maintain the aspect ratio based on the height */
+  height: auto; /* maintain the aspect ratio */
+  align-self: center;
+}

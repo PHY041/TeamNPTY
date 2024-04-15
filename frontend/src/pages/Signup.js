@@ -52,10 +52,9 @@ const Signup = () => {
           <h4>
             <span>
               <a href="/">
-                <img src={logo} alt="Compass logo" id="logo" />
+                <img src={logo} alt="Compass logo" className="image-logo"/>
               </a>
-            </span>{" "}
-            Sign up{" "}
+            </span>
           </h4>
         </div>
         <form
