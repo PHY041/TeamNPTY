@@ -8,7 +8,7 @@ from flask_cors import CORS
 import requests
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
-
+import pytz
 
 
 # Initialize the Firebase app with Realtime Database URL
@@ -27,7 +27,7 @@ def save_data_to_realtime_database(data):
     new_ref.set(data)
     return {"result": "Data saved to Realtime Database", "data": data}  # return a serializable object
 
-def get_current_week_events(all_events):
+def get_current_week_events(user_events):
     """
     Filter events based on the current week.
 
@@ -50,11 +50,43 @@ def get_current_week_events(all_events):
 
     # Filter events that are within the current week
     current_week_events = [
-        event for event in all_events
-        if start_of_week_date <= datetime.strptime(event['date'], '%Y-%m-%d').date() <= end_of_week_date
+        event for event in user_events.values()
+        if start_of_week_date <= datetime.strptime(event['startofevent'], '%Y-%m-%dT%H:%M:%SZ').date() <= end_of_week_date
     ]
 
-    return current_week_events
+    hours_per_day = {
+        'Monday': 0,
+        'Tuesday': 0,
+        'Wednesday': 0,
+        'Thursday': 0,
+        'Friday': 0,
+        'Saturday': 0,
+        'Sunday': 0
+    }
+
+    # Iterate over the events
+    for event in current_week_events:
+        # Parse the start and end times
+        start = datetime.strptime(event['startofevent'], '%Y-%m-%dT%H:%M:%SZ')
+
+        end = datetime.strptime(event['endofevent'], '%Y-%m-%dT%H:%M:%SZ')
+        
+        # Add 8 hours to the datetime
+        start_singapore = start + timedelta(hours=8)
+        end_singapore = end + timedelta(hours=8)
+
+        # Format the datetime as a string in the desired format
+        #start_singapore_str = start_singapore.strftime('%Y-%m-%d %H:%M:%S')
+        #end_singapore_str = end_singapore.strftime('%Y-%m-%d %H:%M:%S')
+        # Calculate the duration of the event in hours
+        duration = round((end_singapore - start_singapore).total_seconds() / 3600,3)
+
+        # Add the duration to the appropriate day of the week
+        day_of_week = start_singapore.strftime('%A')
+        if day_of_week in hours_per_day:
+            hours_per_day[day_of_week] += duration
+
+    return hours_per_day
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -219,7 +251,7 @@ def get_user_events_summary():
         decoded_token = auth.verify_id_token(id_token)
         uid = decoded_token['uid']
         # uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
-    except auth.AuthError:
+    except :
         return jsonify({"error": "Invalid or expired token"}), 401
 
     try:
@@ -229,12 +261,13 @@ def get_user_events_summary():
 
         # Filter out events by user ID if necessary
         user_events = {k: v for k, v in all_events.items() if 'user_id' in v and v['user_id'] == uid}
-
         cuurent_events = get_current_week_events(user_events)
+        print(cuurent_events)
         result = get_current_event_hours_and_summary(cuurent_events)
+        print(result)
+        final_reuslt = {"events":cuurent_events,"summary":result}
 
-
-        return jsonify(result), 200
+        return jsonify(final_reuslt), 200
     except Exception as e:
         return jsonify({"error": "Failed to retrieve events", "details": str(e)}), 500
 

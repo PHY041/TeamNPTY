@@ -84,12 +84,12 @@ def get_event_details_from_image(image_url):
     '''
     #return {keys[i]: event_list[i] if i < len(event_list) else 'N/A' for i in range(len(keys))}
     response_content = response.choices[0].message.content
-    print(response_content)
+    #print(response_content)
     #keys = ["title", "location", "startofevent", "endofevent", "online", "user_id", "description"]
     return(extract_event_details(response_content))
     
    
-print(get_event_details_from_image(image_url))   
+#print(get_event_details_from_image(image_url))   
 
 
 

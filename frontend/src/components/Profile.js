@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import EventsChart from "./EventsChart";
 import Loading from "./Loading";
+import { convertLength } from "@mui/material/styles/cssUtils";
 
 const Profile = () => {
   // const event_data = [
@@ -76,29 +77,31 @@ const Profile = () => {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        const formattedEventData = Object.keys(data[0]).map((day) => {
-          return { day: day, duration: data[0][day] };
-        });
+      .then(data => {
+        console.log("DATA:", data);
+        const formattedEventData = {
+          "Monday": data.events.Monday || 0, // Using '|| 0' to provide a default value in case a day isn't present in the response
+          "Tuesday": data.events.Tuesday || 0,
+          "Wednesday": data.events.Wednesday || 0,
+          "Thursday": data.events.Thursday || 0,
+          "Friday": data.events.Friday || 0,
+          "Saturday": data.events.Saturday || 0,
+          "Sunday": data.events.Sunday || 0,
+          // "Summary": data[0].Summary
+        };
         setEventData(formattedEventData);
         console.log(formattedEventData);
         // Assume calculateSummary is a function to analyze events data
-        setEventSummary(calculateSummary(data[1].Summary));
+        setEventSummary(data.summary);
         setIsLoading(false);
       })
+      
       .catch((error) => {
         console.error("Error fetching events data:", error);
         setIsLoading(false);
       });
   }, []);
 
-  const calculateSummary = (events) => {
-    let summary = "No events found";
-    if (!events.length) return summary;
-    // Perform analysis, e.g., count types of events, sum durations, etc.
-    else summary = events; // Placeholder
-    return summary;
-  };
 
   return (
     <>
@@ -169,18 +172,6 @@ const Profile = () => {
               <h4>Event Summary</h4>
               <div className="event-summary">
                 <p>{eventSummary}</p>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
               </div>
             </div>
           </div>

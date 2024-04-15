@@ -13,6 +13,15 @@ const AddEvent = () => {
     setEventDescription(event.target.value);
   };
 
+  const formatDateToISOStringWithZ = (dateString) => {
+    const date = new Date(dateString);
+    const isoString = date.toISOString();
+    // 'toISOString' returns a string formatted as 'YYYY-MM-DDTHH:mm:ss.sssZ'
+    // If you want to strip the milliseconds, you would have to manipulate the string
+    return isoString.split('.')[0] + 'Z'; // returns 'YYYY-MM-DDTHH:mm:ssZ'
+  };
+  
+
   // Note: This handler will convert local Singapore time to UTC and save it in state
   const handleDatetimeLocalInputChange = (inputId, event) => {
     const localDateTime = event.target.value;
@@ -21,11 +30,13 @@ const AddEvent = () => {
     const date = new Date(localDateTimeWithTimezone);
     const utcDateTime = date.toISOString();
 
+    const formattedUTCDateTime = formatDateToISOStringWithZ(utcDateTime);
+
     // Update the corresponding state based on inputId
     if (inputId === "startOfEvent") {
-      setStartTimeUTC(utcDateTime);
+      setStartTimeUTC(formattedUTCDateTime);
     } else if (inputId === "endOfEvent") {
-      setEndTimeUTC(utcDateTime);
+      setEndTimeUTC(formattedUTCDateTime);
     }
   };
 
