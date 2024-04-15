@@ -69,6 +69,7 @@ const Profile = () => {
     const token = localStorage.getItem("token");
     setIsLoading(true); // Start loading
     fetch("http://127.0.0.1:5000/my-events-summary", {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
