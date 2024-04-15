@@ -35,8 +35,8 @@ nav{
     border-bottom: 2px solid #ccc; /*gray separator between navbar and web body*/
 }
 .compass-logo{
-    height: 60px;
-    width: auto;
+    height: 100px;
+    width: 100px;
     align-self: flex-start;
 }
 nav ul{
@@ -205,47 +205,52 @@ nav .menu-toggle{
     
 }
 
-/*
-.search-box{
-    display: flex;
-    align-items: center;
-    background: white;
-    padding: 5px 10px;
+.event-item{
+    background-color: rgb(124, 187, 239);
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 10px;
+    border: 2px solid #ccc;
     border-radius: 20px;
-}
-.search-box input{
-    padding: 2px;
-    background: transparent;
-    border: 0;
-    outline: 0;
-    color: black;
-    font-size: 14px;
-    min-width: 250px;
+    padding: 10px;
 }
 
-.search-icon{
-    width: 20px;
-    cursor: pointer;
+.event-summary{
+    background-color: rgb(124, 187, 239);
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 10px;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+
 }
 
-    .close-button{
-        display: none;
+.container-profile-all {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* left column takes up 1 fraction of available space, right takes up 2 */
+    gap: 20px; /* defines a gap between grid columns */
+    margin: 20px;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .container-profile-all {
+      grid-template-columns: 1fr; /* Stack the columns on smaller screens */
     }
-    nav ul.open .close-button{
-        font-size: 25px;
-        position: absolute; /* allows the close button to be on RHS
-        top: 0.8rem;
-        right: 2rem;
-        display: block;
-        border:none;
-        background-color: transparent;
-    }
-    nav ul.open .close-button:hover{
-        background-color: #ccc;
-        transform: scale(1.1);
-        transition: all .2s ease;
-    }
-    nav ul.close .close-button{
-        display: none;
-    }
-*/
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* This will take the full height of the viewport */
+  }
+  
+  /* Ensure that the Loading component takes up the full container space */
+  .Loading {
+    flex: 1; /* This will allow it to expand */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

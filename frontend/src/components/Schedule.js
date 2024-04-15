@@ -10,6 +10,7 @@ import {
   ViewDirective,
 } from "@syncfusion/ej2-react-schedule";
 import "../pages/NavPages.css";
+import Loading from "./Loading";
 // Registering Syncfusion license key
 registerLicense(
   "Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXxcdXVVRWJdUUByXkE="
@@ -18,9 +19,11 @@ registerLicense(
 const Scheduler = () => {
 
   const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    setIsLoading(true); // Start loading
     fetch("http://127.0.0.1:5000/my-events", {
       headers: {
         "Content-Type": "application/json",
@@ -49,9 +52,11 @@ const Scheduler = () => {
         }));
     
         setEvents(transformedEvents);
+        setIsLoading(false);
       })
       .catch(error => {
         console.error("Error fetching events:", error);
+        setIsLoading(false);
       });
     }, []);
     
@@ -179,6 +184,11 @@ const Scheduler = () => {
   };
   return (
     <div className="schedule-control-section">
+      {isLoading ? (
+        <div className="loading-container">
+          <Loading />
+        </div>
+      ) : (
       <div className="control-section">
         <div className="control-wrapper">
           <ScheduleComponent
@@ -207,6 +217,7 @@ const Scheduler = () => {
           </ScheduleComponent>
         </div>
       </div>
+      )}
     </div>
   );
 };

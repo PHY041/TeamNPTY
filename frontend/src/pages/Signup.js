@@ -16,8 +16,6 @@ const Signup = () => {
       password3 = password1;
     }
     let formData = {
-      name: event.target.name.value,
-      username: event.target.username.value,
       email: event.target.email.value,
       password: password3,
     };
@@ -67,17 +65,6 @@ const Signup = () => {
           onSubmit={handleSubmit}
         >
           <div className="form__field">
-            <label htmlFor="name">Name:* </label>
-            <input
-              className="input input--text"
-              type="text"
-              name="name"
-              id="name"
-              placeholder="Enter your name..."
-              required
-            />
-          </div>
-          <div className="form__field">
             <label htmlFor="email">Email address:* </label>
             <input
               className="input input--text"
@@ -89,17 +76,6 @@ const Signup = () => {
             />
           </div>
 
-          <div className="form__field">
-            <label htmlFor="username">Username:* </label>
-            <input
-              className="input input--text"
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Create your username..."
-              required
-            />
-          </div>
           <div className="form__field">
             <label htmlFor="password1">Password:* </label>
             <input
