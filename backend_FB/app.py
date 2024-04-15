@@ -3,9 +3,12 @@ import firebase_admin
 from firebase_admin import credentials, auth, storage
 from firebase_admin import db
 from readcalonline import get_event_details_from_image
+from event_summary import get_current_event_hours_and_summary
 from flask_cors import CORS
 import requests
 from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta
+
 
 
 # Initialize the Firebase app with Realtime Database URL
@@ -24,6 +27,34 @@ def save_data_to_realtime_database(data):
     new_ref.set(data)
     return {"result": "Data saved to Realtime Database", "data": data}  # return a serializable object
 
+def get_current_week_events(all_events):
+    """
+    Filter events based on the current week.
+
+    Args:
+    - all_events (list of dicts): A list of event dictionaries, each having at least a 'date' key.
+
+    Returns:
+    - list of dicts: A list of events that are within the current week.
+    """
+    # Find the current date
+    now = datetime.now()
+    
+    # Calculate the start and end of the week
+    start_of_week = now - timedelta(days=now.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+
+    # Convert start and end to dates for comparison (ignore time)
+    start_of_week_date = start_of_week.date()
+    end_of_week_date = end_of_week.date()
+
+    # Filter events that are within the current week
+    current_week_events = [
+        event for event in all_events
+        if start_of_week_date <= datetime.strptime(event['date'], '%Y-%m-%d').date() <= end_of_week_date
+    ]
+
+    return current_week_events
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -171,6 +202,41 @@ def get_user_events():
         return jsonify(user_events), 200
     except Exception as e:
         return jsonify({"error": "Failed to retrieve events", "details": str(e)}), 500
+    
+@app.route('/my-events-summary', methods=['GET'])
+def get_user_events_summary():
+    # Extract the ID token from the Authorization header
+    id_token = request.headers.get('Authorization')
+    if not id_token:
+        return jsonify({"error": "Authorization token is required"}), 401
+
+    if id_token.startswith('Bearer '):
+    # Strip the prefix 'Bearer ' from the token
+        id_token = id_token.split('Bearer ')[1]
+        
+    try:
+        # Verify the ID token and get the user's UID
+        decoded_token = auth.verify_id_token(id_token)
+        uid = decoded_token['uid']
+        # uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
+    except auth.AuthError:
+        return jsonify({"error": "Invalid or expired token"}), 401
+
+    try:
+        # Retrieve events from the database where the 'user_id' matches the uid
+        events_ref = db.reference('events')
+        all_events = events_ref.order_by_child('user_id').equal_to(uid).get()
+
+        # Filter out events by user ID if necessary
+        user_events = {k: v for k, v in all_events.items() if 'user_id' in v and v['user_id'] == uid}
+
+        cuurent_events = get_current_week_events(user_events)
+        result = get_current_event_hours_and_summary(cuurent_events)
+
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": "Failed to retrieve events", "details": str(e)}), 500
 
 
 #ticked
@@ -251,21 +317,73 @@ def extract_events():
         return jsonify({"error": "Missing prompt_content or image_url", "success":False}), 400
 
     # Extract event details from the image
-    event_details = get_event_details_from_image(image_url)
-    
-    # Add the user's UID to the event details
-    event_details['user_id'] = uid
-    event_details['description'] = request.form.get('description')
+    all_events = get_event_details_from_image(image_url)
 
-    ref = get_collection_ref('events')
-    new_ref = ref.push()
+    for event in all_events:
+        event['user_id'] = uid
+        event['description'] = request.form.get('description')
     
-    new_ref.set(event_details)
+
+        ref = get_collection_ref('events')
+        new_ref = ref.push()
+    
+        new_ref.set(event)
     return jsonify({"message": "Event created", "id": new_ref.key,"success":True}), 201
 
-
-
-
+@app.route('/resetpassword', methods=['POST']) 
+def reset_password(): 
+    """Send a password reset email to the user.""" 
+    email = request.json.get('email') 
+    if not email: 
+        return jsonify({'success': False, 'error': 'Email address is required'}), 400 
+ 
+    # Firebase Authentication password reset endpoint with the API key 
+    url = 'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E' 
+ 
+    payload = { 
+        'requestType': 'PASSWORD_RESET', 
+        'email': email 
+    } 
+ 
+    try: 
+        response = requests.post(url, json=payload) 
+        if response.status_code == 200: 
+            return jsonify({'success': True, 'message': 'Password reset email sent successfully'}), 200 
+        else: 
+            return jsonify({'success': False, 'error': response.json().get('error', {}).get('message', 'Failed to send password reset email')}), response.status_code 
+    except requests.RequestException as e: 
+        return jsonify({'success': False, 'error': str(e)}), 500 
+     
+@app.route('/updatepassword', methods=['POST']) 
+def update_password(): 
+    """Update the user's password.""" 
+    id_token = request.headers.get('Authorization') 
+    new_password = request.json.get('password') 
+ 
+    if not id_token or not id_token.startswith('Bearer '): 
+        return jsonify({'success': False, 'error': 'Authorization token is required'}), 401 
+    if not new_password: 
+        return jsonify({'success': False, 'error': 'New password is required'}), 400 
+ 
+    id_token = id_token.split('Bearer ')[1]  # Extract the actual token 
+ 
+    # Firebase change password endpoint with the API key 
+    url = 'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAaL71ivLkD1ET0_3prFEXdR01T832Ek5E' 
+ 
+    payload = { 
+        'idToken': id_token, 
+        'password': new_password, 
+        'returnSecureToken': True  # Whether or not to return an ID and refresh token 
+    } 
+ 
+    try: 
+        response = requests.post(url, json=payload) 
+        if response.status_code == 200: 
+            return jsonify({'success': True, 'message': 'Password updated successfully'}), 200 
+        else: 
+            return jsonify({'success': False, 'error': response.json().get('error', {}).get('message', 'Failed to update password')}), response.status_code 
+    except requests.RequestException as e: 
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
