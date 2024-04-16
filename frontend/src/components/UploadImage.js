@@ -45,7 +45,7 @@ const Uploadimage = () => {
     setEventDescription(event.target.value);
   };
 
-  // remove the image and reset the default preview 
+  // remove the image and reset the default preview
   const handleImageRemove = () => {
     setImage(null);
     setPreview("");
@@ -57,11 +57,26 @@ const Uploadimage = () => {
     const fileInput = document.getElementById("file");
     const file = fileInput.files[0];
     const formData = new FormData();
-    if (image) {
-      formData.append("file", image);
-    } else {
-      formData.append("file", file);
-    } // Append the file under the 'file' key
+
+    if (!file && !image) {
+      alert("Please upload an image or paste an image before submitting.");
+      return;
+    }
+    // Check file extension
+    if (file) {
+      const allowedExtensions = ["jpg", "png", "webp"];
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        alert("Invalid file format. Please upload a jpg, png, or webp file.");
+        setIsLoading(false); // Stop loading due to error
+        return;
+      }
+      formData.append("file", file); // Append the selected file
+    } else if (image) {
+      formData.append("file", image); // Append the pasted image
+    }
+  
+    // Append the file under the 'file' key
     formData.append("description", event.target.description.value); // Append the description
 
     setIsLoading(true); // Start loading
@@ -81,7 +96,7 @@ const Uploadimage = () => {
           window.location.href = "/app";
           setIsLoading(false);
         } else {
-          alert("Failed to upload image");
+          alert(data.error);
           setIsLoading(false);
         }
       });
@@ -116,7 +131,6 @@ const Uploadimage = () => {
                 id="file"
                 name="file"
                 accept="image/png, image/jpeg, image/webp"
-                
               />
               {/* <div className="input input--image">
                 <p>Paste an image here...</p>
@@ -125,11 +139,13 @@ const Uploadimage = () => {
               <div className="image-preview">
                 {preview ? (
                   <>
-                    <button className="remove-image-btn" onClick={handleImageRemove}>
+                    <button
+                      className="remove-image-btn"
+                      onClick={handleImageRemove}
+                    >
                       <FontAwesomeIcon icon={faTimes} />
                     </button>
                     <img src={preview} className="file-image" alt="Preview" />
-                    
                   </>
                 ) : (
                   <p>Copy and Paste an image here...</p>

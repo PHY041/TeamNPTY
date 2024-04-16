@@ -46,7 +46,8 @@ const Profile = () => {
         console.log("DATA:", data);
         if (data.success) {
           // Password reset successful, maybe redirect to login page
-          window.location.href = "/app/profile";
+          window.location.href = "/login";
+          localStorage.removeItem("token");
           alert("Password changed successful");
           setIsLoading(false);
         } else {
@@ -77,16 +78,16 @@ const Profile = () => {
       },
     })
       .then((response) => response.json())
-      .then(data => {
+      .then((data) => {
         console.log("DATA:", data);
         const formattedEventData = {
-          "Monday": data.events.Monday || 0, // Using '|| 0' to provide a default value in case a day isn't present in the response
-          "Tuesday": data.events.Tuesday || 0,
-          "Wednesday": data.events.Wednesday || 0,
-          "Thursday": data.events.Thursday || 0,
-          "Friday": data.events.Friday || 0,
-          "Saturday": data.events.Saturday || 0,
-          "Sunday": data.events.Sunday || 0,
+          Monday: data.events.Monday || 0, // Using '|| 0' to provide a default value in case a day isn't present in the response
+          Tuesday: data.events.Tuesday || 0,
+          Wednesday: data.events.Wednesday || 0,
+          Thursday: data.events.Thursday || 0,
+          Friday: data.events.Friday || 0,
+          Saturday: data.events.Saturday || 0,
+          Sunday: data.events.Sunday || 0,
           // "Summary": data[0].Summary
         };
         setEventData(formattedEventData);
@@ -95,13 +96,12 @@ const Profile = () => {
         setEventSummary(data.summary);
         setIsLoading(false);
       })
-      
+
       .catch((error) => {
         console.error("Error fetching events data:", error);
         setIsLoading(false);
       });
   }, []);
-
 
   return (
     <>

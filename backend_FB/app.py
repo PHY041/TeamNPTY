@@ -351,6 +351,8 @@ def extract_events():
 
     # Extract event details from the image
     all_events = get_event_details_from_image(image_url)
+    if all_events == []:
+        return jsonify({"error": "No events extracted from the image", "success":False}), 400
 
     for event in all_events:
         event['user_id'] = uid
@@ -361,7 +363,7 @@ def extract_events():
         new_ref = ref.push()
     
         new_ref.set(event)
-    return jsonify({"message": "Event created", "id": new_ref.key,"success":True}), 201
+    return jsonify({"message": "Event created","success":True}), 201
 
 @app.route('/resetpassword', methods=['POST']) 
 def reset_password(): 
