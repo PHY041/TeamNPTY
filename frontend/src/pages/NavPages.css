@@ -39,12 +39,7 @@ nav{
     width: 100px;
     align-self: flex-start;
 }
-.file-image{
-    height: 200px;
-    width: 500px;
-    align-self: flex-start;
 
-}
 nav ul{
     display: flex;
     align-items: center;
@@ -266,3 +261,28 @@ nav .menu-toggle{
     background-color:rgb(236, 250, 255);
     
   }
+  
+.image-preview {
+    padding: 10px;
+    border-style: solid;
+    border-width:1px;
+    border-color:lightgrey;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #f0f8ff;
+    max-width: 100%; 
+    max-height: 100%;
+  }
+  
+.file-image {
+    display: block; 
+    width: 100%; 
+    height: auto;
+}
+.remove-image-btn{
+    border-radius: 50%;
+    border:none;
+    background-color: transparent;
+    top:5px;
+    right:5px;
+}

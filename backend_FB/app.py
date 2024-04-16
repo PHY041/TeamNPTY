@@ -220,7 +220,7 @@ def get_user_events():
         decoded_token = auth.verify_id_token(id_token)
         uid = decoded_token['uid']
         # uid = '9d6dN3QAF1cEAEN0GlGbJ8TJa9J3'
-    except auth.AuthError:
+    except:
         return jsonify({"error": "Invalid or expired token"}), 401
 
     try:

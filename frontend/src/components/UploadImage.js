@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 import "../pages/NavPages.css";
 import Loading from "./Loading";
 
@@ -43,6 +43,12 @@ const Uploadimage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const handleEventDescriptionChange = (event) => {
     setEventDescription(event.target.value);
+  };
+
+  // remove the image and reset the default preview 
+  const handleImageRemove = () => {
+    setImage(null);
+    setPreview("");
   };
 
   const handleSubmit = (event) => {
@@ -94,7 +100,7 @@ const Uploadimage = () => {
           <a href="/app/schedule">
             <FontAwesomeIcon icon={faChevronLeft} />
           </a>
-          <h3>Upload File</h3>
+          <h3>Upload Image File</h3>
           <form
             className="form"
             method="POST"
@@ -112,9 +118,22 @@ const Uploadimage = () => {
                 accept="image/png, image/jpeg, image/webp"
                 
               />
-              <div className="input input--image">
+              {/* <div className="input input--image">
                 <p>Paste an image here...</p>
               {preview && <img src={preview} className="file-image" alt="Preview" />}
+              </div> */}
+              <div className="image-preview">
+                {preview ? (
+                  <>
+                    <button className="remove-image-btn" onClick={handleImageRemove}>
+                      <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                    <img src={preview} className="file-image" alt="Preview" />
+                    
+                  </>
+                ) : (
+                  <p>Copy and Paste an image here...</p>
+                )}
               </div>
             </div>
             <div className="form__field">
