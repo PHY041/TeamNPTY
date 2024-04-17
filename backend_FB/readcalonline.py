@@ -63,7 +63,7 @@ def get_event_details_from_image(image_url):
                 ],
             }
         ],
-        max_tokens=300,
+        max_tokens=500,
         temperature=0.2
     )
     '''''

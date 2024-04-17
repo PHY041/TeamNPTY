@@ -9,6 +9,8 @@ import requests
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 import pytz
+import random
+import string
 
 
 # Initialize the Firebase app with Realtime Database URL
@@ -91,7 +93,6 @@ def get_current_week_events(user_events):
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
-
 
 #ticked
 @app.route('/')
@@ -327,7 +328,20 @@ def extract_events():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
+    # Generate a random string of characters
+    def generate_random_string(length):
+        letters = string.ascii_lowercase
+        return ''.join(random.choice(letters) for i in range(length))
+
+   # Check if the file name is 'image.png'
+    if file.filename == 'image.png':
+        # Generate a random file name
+        random_name = generate_random_string(10) + '.png'
+        file.filename = random_name
+
+ 
     filename = secure_filename(file.filename)
+
 
     # The file will be uploaded directly to Firebase Storage, so no need to save locally
     # Create a Firebase Storage reference
